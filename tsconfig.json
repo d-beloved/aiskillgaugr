@@ -6,24 +6,15 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "allowJs": true,
     "module": "ESNext",
     "noEmit": true,
     "moduleResolution": "Bundler",
     "target": "ES2022",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    "types": [
-      "vite/client",
-      "vike-react",
-      "vite-plugin-vercel/types"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vite/client", "vike-react", "vite-plugin-vercel/types"],
     "jsx": "preserve",
     "jsxImportSource": "react"
   },
-  "exclude": [
-    "dist"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

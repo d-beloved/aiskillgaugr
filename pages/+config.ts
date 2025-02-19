@@ -10,8 +10,9 @@ export default {
   Layout,
 
   // https://vike.dev/head-tags
-  title: "My Vike App",
-  description: "Demo showcasing Vike",
+  title: "AISkillGuagr",
+  description: "A platform for testing your coding skills",
+  lang: "en",
 
   extends: vikeReact,
 } satisfies Config;

@@ -1,17 +1,16 @@
 import React from "react";
-import { Counter } from "./Counter.js";
+import { Link } from "../../components/Link.js";
 
 export default function Page() {
   return (
-    <>
-      <h1 className={"font-bold text-3xl pb-4"}>My Vike app</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
-    </>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-4xl font-bold mb-4">Welcome to the AI-Powered Quiz App</h1>
+      <p className="text-lg mb-8">
+        Select your programming language, level of competence, and number of quizzes to get started!
+      </p>
+      <div className="btn">
+        <Link href="/quiz">Start Quiz</Link>
+      </div>
+    </div>
   );
 }
