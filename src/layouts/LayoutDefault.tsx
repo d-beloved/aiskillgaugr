@@ -8,7 +8,7 @@ import { Link } from "../components/Link.js";
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
-    <div className={"flex max-w-5xl m-auto"}>
+    <div className={"flex max-w-full m-auto"}>
       {/* <Sidebar> */}
       {/* <Logo /> */}
       {/* <Link href="/">Welcome</Link>
@@ -31,10 +31,8 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
 
 function Content({ children }: { children: React.ReactNode }) {
   return (
-    <div id="page-container">
-      <div id="page-content" className={"p-5 pb-12 min-h-screen"}>
-        {children}
-      </div>
+    <div id="page-content" className={"flex w-full min-h-screen"}>
+      {children}
     </div>
   );
 }
