@@ -1,19 +1,25 @@
+import { BaseQuestions, Languages, Levels, QuizCounts, TopicWeights } from "@/constants";
+import { LevelQuestions, LevelTopics } from "@/types";
 import type { PageContextServer } from "vike/types";
 
 export type Data = {
   languages: string[];
   levels: string[];
   quizCounts: number[];
+  baseQuestions: {
+    [language: string]: LevelQuestions;
+  };
+  topicWeights: {
+    [language: string]: LevelTopics;
+  };
 };
 
 export const data = async (pageContext: PageContextServer): Promise<Data> => {
-  const languages = ["JavaScript", "Typescript", "Python", "Java", "C++", "Ruby"];
-  const levels = ["Beginner", "Intermediate", "Advanced"];
-  const quizCounts = [10, 20, 30];
-
   return {
-    languages,
-    levels,
-    quizCounts,
+    languages: Languages,
+    levels: Levels,
+    quizCounts: QuizCounts,
+    baseQuestions: BaseQuestions,
+    topicWeights: TopicWeights,
   };
 };
