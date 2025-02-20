@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import QuizForm from "../../components/QuizForm";
+import QuizForm from "../../components/QuizOptions";
 import Quiz from "../../components/Quiz";
 import { QuizOptions } from "../../types";
 

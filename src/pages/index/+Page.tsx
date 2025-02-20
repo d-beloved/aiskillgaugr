@@ -1,7 +1,9 @@
-import React from "react";
-import { Link } from "../../components/Link.js";
+import QuizOptions from "@/components/QuizOptions";
+import React, { useState } from "react";
 
 export default function Page() {
+  const [showQuizOptions, setShowQuizOptions] = useState<boolean>(false);
+
   return (
     <div className="hero min-h-screen">
       <div className="hero-overlay"></div>
@@ -10,9 +12,12 @@ export default function Page() {
           <h1 className="mb-5 text-5xl font-bold">Gauge Your Skill Level</h1>
           <h2 className="mb-5 text-3xl font-bold">Get AI Recommendations For Upskilling</h2>
           <p className="mb-5 text-xl">Select a language and level to start the quiz.</p>
-          <button className="btn btn-primary">Select Language</button>
+          <button className="btn btn-primary" onClick={() => setShowQuizOptions(true)}>
+            Get Started
+          </button>
         </div>
       </div>
+      {showQuizOptions && <QuizOptions showModal={showQuizOptions} onClose={() => setShowQuizOptions(false)} />}
     </div>
   );
 }
