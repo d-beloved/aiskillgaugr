@@ -12,29 +12,25 @@ export interface TopicWeight {
 }
 
 export interface LevelTopics {
-  beginner: TopicWeight[];
-  intermediate: TopicWeight[];
-  advanced: TopicWeight[];
+  [key: string]: TopicWeight[];
 }
 
 export interface LevelQuestions {
-  beginner: QuizQuestion[];
-  intermediate: QuizQuestion[];
-  advanced: QuizQuestion[];
+  [key: string]: QuizQuestion[];
 }
 
-export interface Quiz {
-  id: string;
-  title: string;
-  questions: Question[];
-}
+// export interface Quiz {
+//   id: string;
+//   title: string;
+//   questions: Question[];
+// }
 
-export interface Question {
-  id: string;
-  text: string;
-  options: string[];
-  correctAnswer: string;
-}
+// export interface Question {
+//   id: string;
+//   text: string;
+//   options: string[];
+//   correctAnswer: string;
+// }
 
 export interface Result {
   score: number;

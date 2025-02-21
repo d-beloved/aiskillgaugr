@@ -1,8 +1,10 @@
+import { LevelQuestions, LevelTopics } from "@/types";
+
 export const Languages = ["JavaScript", "TypeScript"];
 export const Levels = ["Beginner", "Intermediate", "Advanced"];
 export const QuizCounts = [10, 20, 30];
 
-export const BaseQuestions = {
+export const BaseQuestions: { [language: string]: LevelQuestions } = {
   javascript: {
     beginner: [
       {
@@ -368,7 +370,7 @@ export const BaseQuestions = {
   },
 };
 
-export const TopicWeights = {
+export const TopicWeights: { [language: string]: LevelTopics } = {
   javascript: {
     beginner: [
       { topic: "Variables", weight: 0.15 },
