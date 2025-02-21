@@ -5,14 +5,7 @@ import { defineConfig } from "vite";
 import vike from "vike/plugin";
 
 export default defineConfig({
-  plugins: [
-    vike({
-      prerender: true,
-    }),
-    react({}),
-    tailwindcss(),
-    vercel(),
-  ],
+  plugins: [vike({}), react({}), tailwindcss(), vercel()],
   build: {
     target: "es2022",
   },
