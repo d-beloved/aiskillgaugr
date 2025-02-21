@@ -1,6 +1,6 @@
 import { useData } from "vike-react/useData";
 import { Data } from "@/pages/index/+data";
-import { fetchQuizzes } from "@/utils/api";
+import startQuiz from "@/services/quiz.service";
 import React, { useState, useEffect, FC } from "react";
 
 interface QuizOptionsProps {
@@ -27,20 +27,22 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    // store the selected options in pageContext and local storage
-    // then make the API call to the AI service
-    try {
-      localStorage.setItem("selectedLanguage", selectedLanguage);
-      localStorage.setItem("selectedLevel", selectedLevel);
-      localStorage.setItem("numberOfQuizzes", numberOfQuizzes);
 
-      const quizzes = await fetchQuizzes(selectedLanguage, selectedLevel, parseInt(numberOfQuizzes));
-      if (quizzes.length === 0) {
-        throw new Error("No quizzes found for the selected options");
-      }
-      onClose;
+    try {
+      localStorage.setItem(
+        "quizPreferences",
+        JSON.stringify({
+          language: selectedLanguage,
+          level: selectedLevel,
+          count: numberOfQuizzes,
+        }),
+      );
+
+      await startQuiz(selectedLanguage, selectedLevel, +numberOfQuizzes);
+
+      // window.location.href = "/quiz";
     } catch (error) {
-      setError(error.message);
+      setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
