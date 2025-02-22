@@ -1,25 +1,14 @@
-import React, { useState } from "react";
-import QuizForm from "../../components/QuizOptions";
-import Quiz from "../../components/Quiz";
-import { QuizOptions } from "../../types";
+import Quiz from "@/components/QuizQuestions";
 
 export default function Page() {
-  const [quizData, setQuizData] = useState<QuizOptions>({
-    language: "",
-    level: "",
-    quizCounts: 0,
-  });
-  const [isQuizStarted, setIsQuizStarted] = useState(false);
-
-  const handleStartQuiz = (data: QuizOptions) => {
-    setQuizData(data);
-    setIsQuizStarted(true);
+  const handleCompleteQuiz = (score: number) => {
+    console.log(`Your score is ${score}%`);
+    alert(`Your score is ${score}%`);
   };
 
   return (
-    <div>
-      <h1>Programming Quiz</h1>
-      {!isQuizStarted ? <QuizForm onStartQuiz={handleStartQuiz} /> : <Quiz quizData={quizData} />}
+    <div className="hero min-h-screen">
+      <Quiz onComplete={handleCompleteQuiz} />
     </div>
   );
 }

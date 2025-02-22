@@ -1,5 +1,6 @@
 import React from "react";
 import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from "vike/client/router";
 
 export default function Page() {
   const { is404 } = usePageContext();
@@ -13,7 +14,7 @@ export default function Page() {
         <div className="max-w-2xl">
           <h1 className="mb-5 text-5xl font-bold">{errorText}</h1>
           <p className="mb-5 text-xl">{errorDescription}</p>
-          <button className="btn btn-primary" onClick={() => (window.location.href = "/")}>
+          <button className="btn btn-primary" onClick={() => navigate("/")}>
             Go Home
           </button>
         </div>

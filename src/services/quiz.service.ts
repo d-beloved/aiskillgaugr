@@ -4,7 +4,9 @@ import { QuizQuestion } from "../types";
 const API_URL = process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
 
 const startQuiz = async (language: string, level: string, count: number) => {
-  const initialQuizQuestions = getBaseQuestions(language, level);
+  const lang = language.toLowerCase();
+  const lvl = level.toLowerCase();
+  const initialQuizQuestions = getBaseQuestions(lang, lvl);
 
   startQuizSession(initialQuizQuestions);
 
@@ -26,7 +28,7 @@ const startQuizSession = (questions: QuizQuestion[]) => {
     JSON.stringify({
       questions,
       currentIndex: 0,
-      answers: {},
+      answers: [],
       timestamp: Date.now(),
     }),
   );

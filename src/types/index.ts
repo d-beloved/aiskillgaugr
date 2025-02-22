@@ -19,33 +19,27 @@ export interface LevelQuestions {
   [key: string]: QuizQuestion[];
 }
 
-// export interface Quiz {
-//   id: string;
-//   title: string;
-//   questions: Question[];
+// export interface Result {
+//   score: number;
+//   totalQuestions: number;
+//   feedback: string;
 // }
 
-// export interface Question {
-//   id: string;
-//   text: string;
-//   options: string[];
-//   correctAnswer: string;
+// export interface Recommendation {
+//   language: string;
+//   level: string;
+//   resources: string[];
 // }
 
-export interface Result {
-  score: number;
-  totalQuestions: number;
-  feedback: string;
-}
-
-export interface Recommendation {
+export interface QuizPreference {
   language: string;
   level: string;
-  resources: string[];
+  quizCount: string;
 }
 
-export interface QuizOptions {
-  language: string;
-  level: string;
-  quizCounts: number;
+export interface QuizData {
+  questions: QuizQuestion[];
+  currentIndex: number;
+  answers: string[];
+  timestamp: number;
 }

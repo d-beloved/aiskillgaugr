@@ -1,7 +1,9 @@
+import React, { useState, useEffect, FC } from "react";
 import { useData } from "vike-react/useData";
+import { navigate } from "vike/client/router";
 import { Data } from "@/pages/index/+data";
 import startQuiz from "@/services/quiz.service";
-import React, { useState, useEffect, FC } from "react";
+import { QuizPreference } from "@/types";
 
 interface QuizOptionsProps {
   showModal: boolean;
@@ -10,43 +12,56 @@ interface QuizOptionsProps {
 
 const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
   const { languages, levels, quizCounts } = useData<Data>();
-
-  const [selectedLanguage, setSelectedLanguage] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("");
-  const [numberOfQuizzes, setNumberOfQuizzes] = useState("");
+  const [quizPreferences, setQuizPreferences] = useState<QuizPreference>({
+    language: "",
+    level: "",
+    quizCount: "",
+  });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
+    const quizPreferencesString = localStorage.getItem("quizPreferences");
+    if (quizPreferencesString) {
+      setQuizPreferences(JSON.parse(quizPreferencesString));
+    }
     const modal = document.getElementById("quizOptionsModal") as HTMLDialogElement;
     if (modal && showModal) {
       modal.showModal();
     }
   }, [showModal]);
 
+  const handlePreferenceChange = (key: string, value: string) => {
+    setQuizPreferences((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
-
+    const { language, level, quizCount } = quizPreferences;
     try {
       localStorage.setItem(
         "quizPreferences",
         JSON.stringify({
-          language: selectedLanguage,
-          level: selectedLevel,
-          count: numberOfQuizzes,
+          language,
+          level,
+          quizCount,
         }),
       );
 
-      await startQuiz(selectedLanguage, selectedLevel, +numberOfQuizzes);
+      await startQuiz(language, level, +quizCount);
 
-      // window.location.href = "/quiz";
+      navigate("/quiz");
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      throw new Error("Failed to start quiz");
     } finally {
       setLoading(false);
     }
   };
+
+  const { language, level, quizCount } = quizPreferences;
 
   return (
     <dialog id="quizOptionsModal" className="modal">
@@ -63,8 +78,8 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
               </label>
               <select
                 id="language"
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
+                value={language}
+                onChange={(e) => handlePreferenceChange("language", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -82,8 +97,8 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
               </label>
               <select
                 id="level"
-                value={selectedLevel}
-                onChange={(e) => setSelectedLevel(e.target.value)}
+                value={level}
+                onChange={(e) => handlePreferenceChange("level", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -101,8 +116,8 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
               </label>
               <select
                 id="level"
-                value={numberOfQuizzes}
-                onChange={(e) => setNumberOfQuizzes(e.target.value)}
+                value={quizCount}
+                onChange={(e) => handlePreferenceChange("quizCount", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -114,11 +129,7 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
                 ))}
               </select>
             </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!selectedLanguage || !selectedLevel || !numberOfQuizzes}
-            >
+            <button type="submit" className="btn btn-primary" disabled={!language || !level || !quizCount || loading}>
               Start Quiz
             </button>
           </div>
