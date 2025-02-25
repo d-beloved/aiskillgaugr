@@ -5,19 +5,22 @@ import "./tailwind.css";
 import React from "react";
 import logoUrl from "../assets/logo.svg";
 import { Link } from "../components/Link.js";
+import { QuizProvider } from "@/contexts/QuizContext";
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
-    <div className={"flex max-w-full m-auto"}>
-      {/* <Sidebar> */}
-      {/* <Logo /> */}
-      {/* <Link href="/">Welcome</Link>
+    <QuizProvider>
+      <div className={"flex max-w-full m-auto"}>
+        {/* <Sidebar> */}
+        {/* <Logo /> */}
+        {/* <Link href="/">Welcome</Link>
       <Link href="/todo">Todo</Link>
       <Link href="/star-wars">Data Fetching</Link> */}
-      {""}
-      {/* </Sidebar> */}
-      <Content>{children}</Content>
-    </div>
+        {""}
+        {/* </Sidebar> */}
+        <Content>{children}</Content>
+      </div>
+    </QuizProvider>
   );
 }
 
