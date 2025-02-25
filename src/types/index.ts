@@ -19,18 +19,6 @@ export interface LevelQuestions {
   [key: string]: QuizQuestion[];
 }
 
-// export interface Result {
-//   score: number;
-//   totalQuestions: number;
-//   feedback: string;
-// }
-
-// export interface Recommendation {
-//   language: string;
-//   level: string;
-//   resources: string[];
-// }
-
 export interface QuizPreference {
   language: string;
   level: string;
@@ -42,4 +30,38 @@ export interface QuizData {
   currentIndex: number;
   answers: string[];
   timestamp: number;
+  isComplete?: boolean;
+}
+
+export interface CachedQuizData {
+  questions: QuizQuestion[];
+  timeStamp: number;
+  preferences: QuizPreference;
+}
+
+export interface QuizContextType {
+  quizPreferences: QuizPreference | null;
+  session: QuizData | null;
+  setPreferences: (prefs: QuizPreference) => void;
+  startNewQuiz: (prefs: QuizPreference) => Promise<void>;
+  submitAnswer: (answer: string) => void;
+  resetQuiz: () => void;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface QuizResult {
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  timeStamp: number;
+  topicPerformance: Record<
+    string,
+    {
+      total: number;
+      correct: number;
+      percentage: number;
+    }
+  >;
 }
