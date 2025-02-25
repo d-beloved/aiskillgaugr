@@ -19,6 +19,7 @@
     "@vite-plugin-vercel/vike": "^9.0.4",
     "@vitejs/plugin-react": "^4.3.4",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

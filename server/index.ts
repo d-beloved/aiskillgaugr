@@ -1,8 +1,11 @@
 import express from "express";
+import dotenv from "dotenv";
+import path from "path";
 import cors from "cors";
 import routes from "./routes/quiz";
 
 const app = express();
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 app.use(
   cors({

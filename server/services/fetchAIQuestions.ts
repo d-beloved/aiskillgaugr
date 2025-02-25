@@ -1,37 +1,49 @@
-import { HfInference } from "@huggingface/inference";
+import { textGeneration } from "@huggingface/inference";
 import { QuizQuestion } from "../../src/types";
 import { TopicWeights } from "../../src/constants";
+import { Request, Response } from "express";
 
-const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+export const generateQuizQuestions = async (req: Request, res: Response) => {
+  const { language, level, count } = req.body;
 
-export const generateQuizQuestions = async (
-  language: string,
-  level: string,
-  count: number,
-): Promise<QuizQuestion[]> => {
+  if (!language || !level || !count) {
+    res.status(400).json({ error: "Missing required fields" });
+    return;
+  }
+
+  if (!process.env.HUGGING_FACE_API_KEY) {
+    throw new Error("HuggingFace API key is not configured");
+  }
+
   try {
     const topics = TopicWeights[language.toLowerCase()][level.toLowerCase()];
 
     const prompt = `Generate ${count} multiple choice questions for ${level} level ${language} programming.
     Focus on these topics with their respective weights: ${topics.map((t) => `${t.topic}(${t.weight})`).join(", ")}.
     
-    For each question, provide:
-    1. A clear question
-    2. Four possible answers
-    3. The correct answer
-    4. The topic it belongs to
-    
-    Format each question as a JSON object with properties:
-    {
-      id: string,
-      question: string,
-      options: string[],
-      correctAnswer: string,
-      topic: string
-    }
-    Note that returned questions should be an array of JSON objects.`;
+    Return a pure JSON array of questions without any additional text, comments, or markdown formatting.
+      Each question should have this exact format:
+      {
+        "id": string,
+        "question": string,
+        "options": string[],
+        "correctAnswer": string,
+        "topic": string
+      }
 
-    const response = await hf.textGeneration({
+      Example of expected response format:
+      [
+        {
+          "id": "1",
+          "question": "What is...",
+          "options": ["a", "b", "c", "d"],
+          "correctAnswer": "b",
+          "topic": "Variables"
+        }
+      ]`;
+
+    const response = await textGeneration({
+      accessToken: process.env.HUGGING_FACE_API_KEY,
       model: "google/gemma-2-2b-it",
       inputs: prompt,
       parameters: {
@@ -42,14 +54,33 @@ export const generateQuizQuestions = async (
       },
     });
 
-    const generatedQuestions: QuizQuestion[] = JSON.parse(response.generated_text);
+    let cleanText = response.generated_text
+      .trim()
+      .replace(/```javascript|```json|```|\n|\/\/.*$/gm, "") // Remove markdown and comments
+      .replace(/const\s+questions\s+=\s+/, "") // Remove variable declaration
+      .trim();
 
-    return generatedQuestions.map((question, index) => ({
+    // Extract the array portion if multiple arrays are present
+    const arrayMatch = cleanText.match(/\[[\s\S]*\]/);
+    if (!arrayMatch) {
+      throw new Error("No valid JSON array found in response");
+    }
+
+    const generatedQuestions: QuizQuestion[] = JSON.parse(arrayMatch[0]);
+
+    const formattedQuestions = generatedQuestions.map((question, index) => ({
       ...question,
       id: `${language.toLowerCase()}-${level.toLowerCase()}-${index + 1}`,
     }));
+
+    res.json({ questions: formattedQuestions });
+    return;
   } catch (error) {
     console.error("Error generating questions:", error);
-    throw error;
+    res.status(500).json({
+      error: "Failed to generate questions",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+    return;
   }
 };
