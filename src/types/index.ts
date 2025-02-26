@@ -44,7 +44,7 @@ export interface QuizContextType {
   session: QuizData | null;
   setPreferences: (prefs: QuizPreference) => void;
   startNewQuiz: (prefs: QuizPreference) => Promise<void>;
-  submitAnswer: (answer: string) => void;
+  submitAnswer: (answer: string, isComplete: boolean) => void;
   resetQuiz: () => void;
   isLoading: boolean;
   error: string | null;

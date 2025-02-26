@@ -35,6 +35,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     try {
       const questions = await startQuiz(language, level, +quizCount);
+      localStorage.setItem("quizPreferences", JSON.stringify(prefs));
       setPreferences(prefs);
       setSession({
         questions,
@@ -49,7 +50,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const submitAnswer = (answer: string) => {
+  const submitAnswer = (answer: string, isComplete: boolean) => {
     if (!session) return;
 
     const newAnswers = [...session.answers, answer];
@@ -57,6 +58,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ...session,
       answers: newAnswers,
       currentIndex: session.currentIndex + 1,
+      isComplete,
     };
 
     setSession(newSession);

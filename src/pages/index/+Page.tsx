@@ -1,4 +1,4 @@
-import QuizOptions from "@/components/QuizOptions";
+import QuizOptionsModal from "@/components/QuizOptionsModal";
 import React, { useState } from "react";
 
 export default function Page() {
@@ -17,7 +17,7 @@ export default function Page() {
           </button>
         </div>
       </div>
-      {showQuizOptions && <QuizOptions showModal={showQuizOptions} onClose={() => setShowQuizOptions(false)} />}
+      {showQuizOptions && <QuizOptionsModal showModal={showQuizOptions} onClose={() => setShowQuizOptions(false)} />}
     </div>
   );
 }

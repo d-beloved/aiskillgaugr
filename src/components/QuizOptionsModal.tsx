@@ -2,69 +2,60 @@ import React, { useState, useEffect, FC } from "react";
 import { useData } from "vike-react/useData";
 import { navigate } from "vike/client/router";
 import { Data } from "@/pages/index/+data";
-import startQuiz from "@/services/quiz.service";
-import { QuizPreference } from "@/types";
+import { useQuiz } from "@/contexts/QuizContext";
 
-interface QuizOptionsProps {
+interface QuizOptionsModalProps {
   showModal: boolean;
   onClose: () => void;
 }
 
-const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
+const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => {
   const { languages, levels, quizCounts } = useData<Data>();
-  const [quizPreferences, setQuizPreferences] = useState<QuizPreference>({
-    language: "",
-    level: "",
-    quizCount: "",
-  });
+  const { startNewQuiz, isLoading, error, quizPreferences } = useQuiz();
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const quizPreferencesString = localStorage.getItem("quizPreferences");
-    if (quizPreferencesString) {
-      setQuizPreferences(JSON.parse(quizPreferencesString));
-    }
     const modal = document.getElementById("quizOptionsModal") as HTMLDialogElement;
     if (modal && showModal) {
       modal.showModal();
     }
   }, [showModal]);
 
-  const handlePreferenceChange = (key: string, value: string) => {
-    setQuizPreferences((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  // const handlePreferenceChange = (key: string, value: string) => {
+  //   setQuizPreferences((prev) => ({
+  //     ...prev,
+  //     [key]: value,
+  //   }));
+  // };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    const { language, level, quizCount } = quizPreferences;
+
+    const formData = new FormData(event.target as HTMLFormElement);
+    const preferences = {
+      language: formData.get("language") as string,
+      level: formData.get("level") as string,
+      quizCount: formData.get("quizCount") as string,
+    };
+
     try {
-      localStorage.setItem(
-        "quizPreferences",
-        JSON.stringify({
-          language,
-          level,
-          quizCount,
-        }),
-      );
-
-      await startQuiz(language, level, +quizCount);
-
+      await startNewQuiz(preferences);
       navigate("/quiz");
     } catch (error) {
-      throw new Error("Failed to start quiz");
+      console.error("Failed to start quiz");
     } finally {
       setLoading(false);
     }
   };
 
-  const { language, level, quizCount } = quizPreferences;
+  const { language, level, quizCount } = quizPreferences || {};
 
   return (
     <dialog id="quizOptionsModal" className="modal">
+      {isLoading && <div className="loading loading-spinner"></div>}
+      {error && <div className="alert alert-error">{error}</div>}
       <div className="modal-box">
         <form method="dialog" onSubmit={handleSubmit}>
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>
@@ -78,8 +69,9 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
               </label>
               <select
                 id="language"
+                name="language"
                 value={language}
-                onChange={(e) => handlePreferenceChange("language", e.target.value)}
+                // onChange={(e) => handlePreferenceChange("language", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -97,8 +89,9 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
               </label>
               <select
                 id="level"
+                name="level"
                 value={level}
-                onChange={(e) => handlePreferenceChange("level", e.target.value)}
+                // onChange={(e) => handlePreferenceChange("level", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -115,9 +108,10 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
                 Number of Quizzes:
               </label>
               <select
-                id="level"
+                id="quizCount"
+                name="quizCount"
                 value={quizCount}
-                onChange={(e) => handlePreferenceChange("quizCount", e.target.value)}
+                // onChange={(e) => handlePreferenceChange("quizCount", e.target.value)}
                 required
                 className="mt-1 block w-full"
               >
@@ -139,4 +133,4 @@ const QuizOptions: FC<QuizOptionsProps> = ({ showModal, onClose }) => {
   );
 };
 
-export default QuizOptions;
+export default QuizOptionsModal;
