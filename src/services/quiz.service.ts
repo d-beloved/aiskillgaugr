@@ -30,7 +30,6 @@ export const startQuiz = async (language: string, level: string, count: number):
   const cachedQuestions = getCachedQuestions(preferences);
 
   if (cachedQuestions) {
-    setInitialQuizSession(cachedQuestions);
     return cachedQuestions;
   }
 
@@ -38,12 +37,9 @@ export const startQuiz = async (language: string, level: string, count: number):
   const lvl = level.toLowerCase();
   const initialQuizQuestions = getBaseQuestions(lang, lvl);
 
-  setInitialQuizSession(initialQuizQuestions);
-
   try {
     const aiQuestions = await fetchAIQuestions(language, level, count - initialQuizQuestions.length);
     const combinedQuestions = mergeQuestions(initialQuizQuestions, aiQuestions);
-    updateQuizSession(combinedQuestions);
 
     // cache the questions for 48 hours to reduce API calls and token usage, also improving the app performance
     cacheQuestions(preferences, combinedQuestions);
@@ -57,24 +53,6 @@ export const startQuiz = async (language: string, level: string, count: number):
 
 const getBaseQuestions = (language: string, level: string): QuizQuestion[] => {
   return BaseQuestions[language][level] || [];
-};
-
-const setInitialQuizSession = (questions: QuizQuestion[]) => {
-  localStorage.setItem(
-    "currentQuiz",
-    JSON.stringify({
-      questions,
-      currentIndex: 0,
-      answers: [],
-      timestamp: Date.now(),
-    }),
-  );
-};
-
-const updateQuizSession = (questions: QuizQuestion[]) => {
-  const session = JSON.parse(localStorage.getItem("currentQuiz") || "{}");
-  session.questions = questions;
-  localStorage.setItem("currentQuiz", JSON.stringify(session));
 };
 
 const mergeQuestions = (base: QuizQuestion[], ai: QuizQuestion[]) => {

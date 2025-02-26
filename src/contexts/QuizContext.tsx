@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { startQuiz } from "@/services/quiz.service";
 import { QuizContextType, QuizData, QuizPreference } from "@/types";
+import { sessionManager } from "@/utils/session";
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
@@ -12,19 +13,13 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Check for existing session on mount
   useEffect(() => {
-    const savedSession = localStorage.getItem("currentQuiz");
-    const savedPreferences = localStorage.getItem("quizPreferences");
+    const recoveredSession = sessionManager.recoverSession();
 
-    if (savedSession && savedPreferences) {
-      const parsedSession = JSON.parse(savedSession);
-      const parsedPreferences = JSON.parse(savedPreferences);
-
-      // Check if session is still valid (within 2 hours)
-      const isValid = Date.now() - parsedSession.timestamp < 2 * 60 * 60 * 1000;
-
-      if (isValid) {
-        setSession(parsedSession);
-        setPreferences(parsedPreferences);
+    if (recoveredSession) {
+      setSession(recoveredSession);
+      const preferences = sessionManager.recoverPreferences();
+      if (preferences) {
+        setPreferences(preferences);
       }
     }
   }, []);
@@ -35,14 +30,16 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     try {
       const questions = await startQuiz(language, level, +quizCount);
-      localStorage.setItem("quizPreferences", JSON.stringify(prefs));
-      setPreferences(prefs);
-      setSession({
+      const newSession = {
         questions,
         currentIndex: 0,
         answers: [],
-        timestamp: Date.now(),
-      });
+        isComplete: false,
+        ...sessionManager.create(),
+      };
+      setSession(newSession);
+      setPreferences(prefs);
+      sessionManager.save(newSession, prefs);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to start quiz");
     } finally {
@@ -62,14 +59,13 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     setSession(newSession);
-    localStorage.setItem("currentQuiz", JSON.stringify(newSession));
+    sessionManager.updateSession(newSession);
   };
 
   const resetQuiz = () => {
     setSession(null);
     setPreferences(null);
-    localStorage.removeItem("currentQuiz");
-    localStorage.removeItem("quizPreferences");
+    sessionManager.clear();
   };
 
   return (

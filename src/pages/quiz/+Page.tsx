@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { navigate } from "vike/client/router";
 import { useQuiz } from "@/contexts/QuizContext";
+import SessionWarning from "@/components/SessionWarning";
 
 export default function Page() {
   const { session, quizPreferences, submitAnswer, isLoading } = useQuiz();
@@ -30,6 +31,7 @@ export default function Page() {
   };
   return (
     <div className="hero min-h-screen">
+      <SessionWarning />
       <div>
         <h1>
           {level} level {language} Quiz

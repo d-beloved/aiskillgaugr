@@ -25,11 +25,10 @@ export interface QuizPreference {
   quizCount: string;
 }
 
-export interface QuizData {
+export interface QuizData extends SessionManager {
   questions: QuizQuestion[];
   currentIndex: number;
   answers: string[];
-  timestamp: number;
   isComplete?: boolean;
 }
 
@@ -64,4 +63,10 @@ export interface QuizResult {
       percentage: number;
     }
   >;
+}
+
+export interface SessionManager {
+  timestamp: number;
+  expiresIn: number; // in milliseconds
+  isExpired: boolean;
 }
