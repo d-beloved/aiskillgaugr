@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { startQuiz } from "@/services/quiz.service";
-import { QuizContextType, QuizData, QuizPreference } from "@/types";
+import { AppError, QuizContextType, QuizData, QuizPreference } from "@/types";
 import { sessionManager } from "@/utils/session";
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -9,7 +9,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [quizPreferences, setPreferences] = useState<QuizPreference | null>(null);
   const [session, setSession] = useState<QuizData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AppError | null>(null);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -23,6 +23,8 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
   }, []);
+
+  const clearError = () => setError(null);
 
   const startNewQuiz = async (prefs: QuizPreference) => {
     const { language, level, quizCount } = prefs;
@@ -41,7 +43,11 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setPreferences(prefs);
       sessionManager.save(newSession, prefs);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to start quiz");
+      setError({
+        type: "API_ERROR",
+        message: "Failed to start quiz",
+        details: err instanceof Error ? err.message : "Unknown error",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -79,6 +85,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         resetQuiz,
         isLoading,
         error,
+        clearError,
       }}
     >
       {children}

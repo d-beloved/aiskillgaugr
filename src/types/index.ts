@@ -1,3 +1,5 @@
+export type ErrorType = "SESSION_EXPIRED" | "CACHE_ERROR" | "API_ERROR" | "NETWORK_ERROR";
+
 export interface QuizQuestion {
   id: string;
   question: string;
@@ -46,7 +48,8 @@ export interface QuizContextType {
   submitAnswer: (answer: string, isComplete: boolean) => void;
   resetQuiz: () => void;
   isLoading: boolean;
-  error: string | null;
+  error: AppError | null;
+  clearError: () => void;
 }
 
 export interface QuizResult {
@@ -69,4 +72,10 @@ export interface SessionManager {
   timestamp: number;
   expiresIn: number; // in milliseconds
   isExpired: boolean;
+}
+
+export interface AppError {
+  type: ErrorType;
+  message: string;
+  details?: string;
 }
