@@ -13,6 +13,7 @@ export const cacheManager = {
   },
 
   get(preferences: QuizPreference): CachedData | null {
+    this.clearExpired();
     const cacheKey = this.generateKey(preferences);
     const cachedData = localStorage.getItem(cacheKey);
 
@@ -25,26 +26,13 @@ export const cacheManager = {
   },
 
   set(preferences: QuizPreference, questions: QuizQuestion[]) {
+    this.clearExpired();
     const cacheKey = this.generateKey(preferences);
     const data = {
       questions,
       timestamp: Date.now(),
     };
     localStorage.setItem(cacheKey, JSON.stringify(data));
-  },
-
-  delete(preferences: QuizPreference): void {
-    if (preferences) {
-      const cacheKey = this.generateKey(preferences);
-      localStorage.removeItem(cacheKey);
-    } else {
-      const keys = Object.keys(localStorage);
-      keys.forEach((key) => {
-        if (key.startsWith("quiz-cache-")) {
-          localStorage.removeItem(key);
-        }
-      });
-    }
   },
 
   clearExpired(): void {

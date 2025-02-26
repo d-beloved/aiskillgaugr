@@ -20,7 +20,12 @@ export const sessionManager = {
     if (!savedSession) return null;
 
     const parsedSession = JSON.parse(savedSession) as QuizData;
-    return this.isExpired(parsedSession) ? null : parsedSession;
+    if (this.isExpired(parsedSession)) {
+      this.clearSession();
+      return null;
+    } else {
+      return parsedSession;
+    }
   },
 
   recoverPreferences(): QuizPreference | null {
@@ -36,6 +41,10 @@ export const sessionManager = {
 
   updateSession(session: QuizData): void {
     localStorage.setItem("currentQuiz", JSON.stringify(session));
+  },
+
+  clearSession(): void {
+    localStorage.removeItem("currentQuiz");
   },
 
   clear(): void {

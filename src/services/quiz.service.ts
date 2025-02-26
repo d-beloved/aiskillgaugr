@@ -66,10 +66,3 @@ async function fetchAIQuestions(language: string, level: string, count: number):
     return [];
   }
 }
-
-setInterval(
-  () => {
-    cacheManager.clearExpired();
-  },
-  1000 * 60 * 60,
-); // check every hour
