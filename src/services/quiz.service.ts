@@ -1,36 +1,15 @@
 import { BaseQuestions } from "@/constants";
-import { QuizPreference, QuizQuestion } from "../types";
+import { QuizQuestion } from "../types";
+import { cacheManager } from "@/utils/cache";
 
 const API_URL = process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
-const CACHE_DURATION = 48 * 60 * 60 * 1000; // 48 hours
-
-export const getCachedQuestions = (preferences: QuizPreference): QuizQuestion[] | null => {
-  const cacheKey = `quiz-cache-${preferences.language}-${preferences.level}`;
-  const cachedData = localStorage.getItem(cacheKey);
-
-  if (!cachedData) return null;
-
-  const { questions, timestamp } = JSON.parse(cachedData);
-  const isValid = Date.now() - timestamp < CACHE_DURATION;
-
-  return isValid ? questions : null;
-};
-
-export const cacheQuestions = (preferences: QuizPreference, questions: QuizQuestion[]) => {
-  const cacheKey = `quiz-cache-${preferences.language}-${preferences.level}`;
-  const data = {
-    questions,
-    timestamp: Date.now(),
-  };
-  localStorage.setItem(cacheKey, JSON.stringify(data));
-};
 
 export const startQuiz = async (language: string, level: string, count: number): Promise<QuizQuestion[]> => {
   const preferences = { language, level, quizCount: count.toString() };
-  const cachedQuestions = getCachedQuestions(preferences);
+  const cachedQuestions = cacheManager.get(preferences);
 
   if (cachedQuestions) {
-    return cachedQuestions;
+    return cachedQuestions.questions;
   }
 
   const lang = language.toLowerCase();
@@ -42,7 +21,7 @@ export const startQuiz = async (language: string, level: string, count: number):
     const combinedQuestions = mergeQuestions(initialQuizQuestions, aiQuestions);
 
     // cache the questions for 48 hours to reduce API calls and token usage, also improving the app performance
-    cacheQuestions(preferences, combinedQuestions);
+    cacheManager.set(preferences, combinedQuestions);
 
     return combinedQuestions;
   } catch (error) {
@@ -87,3 +66,10 @@ async function fetchAIQuestions(language: string, level: string, count: number):
     return [];
   }
 }
+
+setInterval(
+  () => {
+    cacheManager.clearExpired();
+  },
+  1000 * 60 * 60,
+); // check every hour
