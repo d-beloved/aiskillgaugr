@@ -11,7 +11,7 @@ interface QuizOptionsModalProps {
 
 const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => {
   const { languages, levels, quizCounts } = useData<Data>();
-  const { startNewQuiz, isLoading, error, quizPreferences } = useQuiz();
+  const { startNewQuiz, isLoading, quizPreferences } = useQuiz();
 
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +55,6 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
   return (
     <dialog id="quizOptionsModal" className="modal">
       {isLoading && <div className="loading loading-spinner"></div>}
-      {error && <div className="alert alert-error">{error}</div>}
       <div className="modal-box">
         <form method="dialog" onSubmit={handleSubmit}>
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>
