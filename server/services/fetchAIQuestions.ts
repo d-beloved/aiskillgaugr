@@ -1,7 +1,7 @@
-import { textGeneration } from "@huggingface/inference";
 import { QuizQuestion } from "../../src/types";
 import { TopicWeights } from "../../src/constants";
 import { Request, Response } from "express";
+import { sendPrompt } from "../routes/utils/sendPrompt";
 
 export const generateQuizQuestions = async (req: Request, res: Response) => {
   const { language, level, count } = req.body;
@@ -42,17 +42,7 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
         }
       ]`;
 
-    const response = await textGeneration({
-      accessToken: process.env.HUGGING_FACE_API_KEY,
-      model: "google/gemma-2-2b-it",
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: 2048,
-        temperature: 0.7,
-        top_p: 0.95,
-        return_full_text: false,
-      },
-    });
+    const response = await sendPrompt(prompt);
 
     let cleanText = response.generated_text
       .trim()
@@ -74,13 +64,11 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
     }));
 
     res.json({ questions: formattedQuestions });
-    return;
   } catch (error) {
     console.error("Error generating questions:", error);
     res.status(500).json({
       error: "Failed to generate questions",
       details: error instanceof Error ? error.message : "Unknown error",
     });
-    return;
   }
 };
