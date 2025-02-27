@@ -47,6 +47,16 @@ export const sessionManager = {
     localStorage.removeItem("currentQuiz");
   },
 
+  setRecommendation(recommendation: string): void {
+    localStorage.setItem("recommendation", JSON.stringify(recommendation));
+  },
+
+  recoverRecommendation(): string | null {
+    const savedRecommendation = localStorage.getItem("recommendation");
+    if (!savedRecommendation) return null;
+    return JSON.parse(savedRecommendation);
+  },
+
   clear(): void {
     localStorage.removeItem("currentQuiz");
     localStorage.removeItem("quizPreferences");

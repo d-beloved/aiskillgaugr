@@ -50,22 +50,8 @@ export interface QuizContextType {
   isLoading: boolean;
   error: AppError | null;
   clearError: () => void;
-}
-
-export interface QuizResult {
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  wrongAnswers: number;
-  timeStamp: number;
-  topicPerformance: Record<
-    string,
-    {
-      total: number;
-      correct: number;
-      percentage: number;
-    }
-  >;
+  getRecommendation: (prefs: QuizPreference, questions: QuizQuestion[], answers: string[], score: number) => void;
+  recommendation: string;
 }
 
 export interface SessionManager {

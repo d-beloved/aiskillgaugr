@@ -1,5 +1,5 @@
 import { BaseQuestions } from "@/constants";
-import { QuizQuestion } from "../types";
+import { QuizQuestion, QuizPreference } from "../types";
 import { cacheManager } from "@/utils/cache";
 
 const API_URL = process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
@@ -66,3 +66,29 @@ async function fetchAIQuestions(language: string, level: string, count: number):
     return [];
   }
 }
+
+export const fetchAIRecommendations = async (
+  preferences: QuizPreference,
+  questions: QuizQuestion[],
+  answers: string[],
+  score: number,
+): Promise<string> => {
+  try {
+    const response = await fetch(`${API_URL}/api/recommendation`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ preferences, questions, answers, score }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch recommendation");
+    }
+
+    const data = await response.json();
+    return data.recommendation;
+  } catch (error) {
+    console.error("Error fetching recommendation:", error);
+    return "";
+  }
+};

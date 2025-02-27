@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { startQuiz } from "@/services/quiz.service";
-import { AppError, QuizContextType, QuizData, QuizPreference } from "@/types";
+import { fetchAIRecommendations, startQuiz } from "@/services/quiz.service";
+import { AppError, QuizContextType, QuizData, QuizPreference, QuizQuestion } from "@/types";
 import { sessionManager } from "@/utils/session";
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -10,6 +10,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<QuizData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AppError | null>(null);
+  const [recommendation, setRecommendation] = useState<string>("");
 
   // Check for existing session on mount
   useEffect(() => {
@@ -21,6 +22,11 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (preferences) {
         setPreferences(preferences);
       }
+    }
+
+    const recoveredRecommendation = sessionManager.recoverRecommendation();
+    if (recoveredRecommendation) {
+      setRecommendation(recoveredRecommendation);
     }
   }, []);
 
@@ -74,6 +80,28 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionManager.clear();
   };
 
+  const getRecommendation = async (
+    prefs: QuizPreference,
+    questions: QuizQuestion[],
+    answers: string[],
+    score: number,
+  ) => {
+    setIsLoading(true);
+    try {
+      const AIRecommendation = await fetchAIRecommendations(prefs, questions, answers, score);
+      setRecommendation(AIRecommendation);
+      sessionManager.setRecommendation(AIRecommendation);
+    } catch (err) {
+      setError({
+        type: "API_ERROR",
+        message: "Failed to get recommendation",
+        details: err instanceof Error ? err.message : "Unknown error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <QuizContext.Provider
       value={{
@@ -86,6 +114,8 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         error,
         clearError,
+        getRecommendation,
+        recommendation,
       }}
     >
       {children}
