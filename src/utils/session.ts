@@ -1,4 +1,4 @@
-import { QuizData, QuizPreference } from "@/types";
+import { QuizData, QuizPreference, QuizResults } from "@/types";
 
 const SESSION_DURATION = 0.25 * 60 * 60 * 1000; // 15 mins
 // TODO: implement different timings based on number of quiz selected
@@ -48,14 +48,24 @@ export const sessionManager = {
     localStorage.removeItem("currentQuiz");
   },
 
-  setRecommendation(recommendation: string): void {
+  saveRecommendation(recommendation: string): void {
     localStorage.setItem("recommendation", JSON.stringify(recommendation));
   },
 
-  recoverRecommendation(): string | null {
+  recoverRecommendation(): string {
     const savedRecommendation = localStorage.getItem("recommendation");
-    if (!savedRecommendation) return null;
+    if (!savedRecommendation) return "";
     return JSON.parse(savedRecommendation);
+  },
+
+  saveQuizResult(quizResult: QuizResults): void {
+    localStorage.setItem("quizResult", JSON.stringify(quizResult));
+  },
+
+  recoverQuizResult(): QuizResults | null {
+    const savedQuizResult = localStorage.getItem("quizResult");
+    if (!savedQuizResult) return null;
+    return JSON.parse(savedQuizResult);
   },
 
   clear(): void {

@@ -2,42 +2,44 @@ import { useEffect, useState } from "react";
 import { navigate } from "vike/client/router";
 import { useQuiz } from "@/contexts/QuizContext";
 import ErrorAlert from "@/components/common/ErrorAlert";
-import { QuizData } from "@/types";
 
 export default function QuizResult() {
-  const { quizPreferences, session, resetQuiz, error, clearError, isLoading, recommendation, getRecommendation } =
+  const { quizPreferences, quizResult, resetQuiz, error, clearError, isLoading, recommendation, getRecommendation } =
     useQuiz();
-  const [currentSession, setCurrentSession] = useState<QuizData | null>(session);
-  const [score, setScore] = useState<number>(0);
-  const [scorePercent, setScorePercent] = useState<number>(0);
-
-  const { questions, answers } = currentSession!;
+  const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
-    if (!session?.isComplete) {
-      navigate("/quiz");
-      return;
+    if (!quizResult) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoading(false);
     }
-    const numOfCorrectAnsSelected = answers.filter((answer, index) => answer === questions[index].correctAnswer).length;
-    setScore(numOfCorrectAnsSelected);
-    setScorePercent((numOfCorrectAnsSelected / questions.length) * 100);
-  }, [session]);
+  }, [quizResult]);
+
+  if (!quizResult || showLoading) {
+    return <div className="loading loading-spinner"></div>;
+  }
+
+  const { questions, answers, score, scorePercentage } = quizResult;
 
   const handleNewSession = () => {
     resetQuiz();
     navigate("/");
   };
 
-  if (!session?.isComplete) {
-    return null;
-  }
-
   const handleGetRecommendation = () => {
     getRecommendation(quizPreferences!, questions, answers, score);
   };
 
   const AIRecommendation = () => {
-    return <p>{recommendation}</p>;
+    return (
+      <div className="card w-96 bg-base-100 shadow-xl">
+        <p>{recommendation}</p>
+      </div>
+    );
   };
 
   const correctAnswersCard = () => {
@@ -69,14 +71,17 @@ export default function QuizResult() {
         {recommendation && AIRecommendation()}
         <div className="card-body">
           <h2 className="card-title">Quiz Results</h2>
-          <p>Score: {scorePercent.toFixed(2)}%</p>
+          <p>Score: {scorePercentage}</p>
           <p>Correct Answers: {score}</p>
           <p>Total Questions: {questions.length}</p>
           <button className="btn btn-primary" onClick={handleNewSession}>
             Start New Quiz
+            {/* Todo: Add an info icon (or a modal that pops up after clicking it) that explains that this will start a new session erasing your previous answers,
+                preferences and recommendations if available.
+            */}
           </button>
           <button className="btn btn-primary" onClick={() => navigate("/")}>
-            Home
+            Go Home
           </button>
         </div>
       </div>

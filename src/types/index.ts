@@ -45,13 +45,21 @@ export interface QuizContextType {
   session: QuizData | null;
   setPreferences: (prefs: QuizPreference) => void;
   startNewQuiz: (prefs: QuizPreference) => Promise<void>;
-  submitAnswer: (answer: string, isComplete: boolean) => void;
+  submitAnswer: (answer: string, isComplete: boolean) => Promise<boolean>;
   resetQuiz: () => void;
   isLoading: boolean;
   error: AppError | null;
   clearError: () => void;
   getRecommendation: (prefs: QuizPreference, questions: QuizQuestion[], answers: string[], score: number) => void;
   recommendation: string;
+  quizResult: QuizResults | null;
+}
+
+export interface QuizResults {
+  questions: QuizQuestion[];
+  answers: string[];
+  score: number;
+  scorePercentage: string;
 }
 
 export interface SessionManager {
@@ -64,4 +72,11 @@ export interface AppError {
   type: ErrorType;
   message: string;
   details?: string;
+}
+
+export interface RecoveredData {
+  session: QuizData | null;
+  preferences: QuizPreference | null;
+  recommendation: string;
+  result: QuizResults | null;
 }

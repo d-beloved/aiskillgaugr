@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { fetchAIRecommendations, startQuiz } from "@/services/quiz.service";
-import { AppError, QuizContextType, QuizData, QuizPreference, QuizQuestion } from "@/types";
+import { AppError, QuizContextType, QuizData, QuizPreference, QuizQuestion, QuizResults, RecoveredData } from "@/types";
 import { sessionManager } from "@/utils/session";
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -11,23 +11,30 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AppError | null>(null);
   const [recommendation, setRecommendation] = useState<string>("");
+  const [quizResult, setQuizResult] = useState<QuizResults | null>(null);
 
-  // Check for existing session on mount
+  // Check for existing sessions and data on mount
   useEffect(() => {
-    const recoveredSession = sessionManager.recoverSession();
+    const recovered: RecoveredData = {
+      session: sessionManager.recoverSession(),
+      preferences: sessionManager.recoverPreferences(),
+      recommendation: sessionManager.recoverRecommendation(),
+      result: sessionManager.recoverQuizResult(),
+    };
 
-    if (recoveredSession) {
-      setSession(recoveredSession);
-      const preferences = sessionManager.recoverPreferences();
-      if (preferences) {
-        setPreferences(preferences);
+    const setters = {
+      session: setSession,
+      preferences: setPreferences,
+      recommendation: setRecommendation,
+      result: setQuizResult,
+    } as const;
+
+    Object.entries(recovered).forEach(([key, value]) => {
+      if (value) {
+        const setter = setters[key as keyof typeof setters];
+        setter(value);
       }
-    }
-
-    const recoveredRecommendation = sessionManager.recoverRecommendation();
-    if (recoveredRecommendation) {
-      setRecommendation(recoveredRecommendation);
-    }
+    });
   }, []);
 
   const clearError = () => setError(null);
@@ -59,19 +66,37 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const submitAnswer = (answer: string, isComplete: boolean) => {
-    if (!session) return;
+  const submitAnswer = async (answer: string, isLastQuestion: boolean): Promise<boolean> => {
+    if (!session) return false;
 
     const newAnswers = [...session.answers, answer];
     const newSession = {
       ...session,
       answers: newAnswers,
       currentIndex: session.currentIndex + 1,
-      isComplete,
+      isComplete: isLastQuestion,
     };
 
     setSession(newSession);
     sessionManager.updateSession(newSession);
+
+    if (isLastQuestion) {
+      const { answers, questions } = newSession;
+      const quizScore = answers.filter((a, index) => a === questions[index].correctAnswer).length;
+      const scorePercent = ((quizScore / questions.length) * 100).toFixed(2);
+
+      const newQuizResults = {
+        questions,
+        answers,
+        score: quizScore,
+        scorePercentage: `${scorePercent}%`,
+      };
+
+      setQuizResult(newQuizResults);
+      sessionManager.saveQuizResult(newQuizResults);
+      return true;
+    }
+    return false;
   };
 
   const resetQuiz = () => {
@@ -90,7 +115,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const AIRecommendation = await fetchAIRecommendations(prefs, questions, answers, score);
       setRecommendation(AIRecommendation);
-      sessionManager.setRecommendation(AIRecommendation);
+      sessionManager.saveRecommendation(AIRecommendation);
     } catch (err) {
       setError({
         type: "API_ERROR",
@@ -116,6 +141,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearError,
         getRecommendation,
         recommendation,
+        quizResult,
       }}
     >
       {children}

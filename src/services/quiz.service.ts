@@ -17,7 +17,8 @@ export const startQuiz = async (language: string, level: string, count: number):
   const initialQuizQuestions = getBaseQuestions(lang, lvl);
 
   try {
-    const aiQuestions = await fetchAIQuestions(language, level, count - initialQuizQuestions.length);
+    // const aiQuestions = await fetchAIQuestions(language, level, count - initialQuizQuestions.length);
+    const aiQuestions = [] as QuizQuestion[];
     const combinedQuestions = mergeQuestions(initialQuizQuestions, aiQuestions);
 
     // cache the questions for 48 hours to reduce API calls and token usage, also improving the app performance

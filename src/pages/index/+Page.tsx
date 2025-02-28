@@ -1,11 +1,14 @@
+import { useState } from "react";
 import ErrorAlert from "@/components/common/ErrorAlert";
 import QuizOptionsModal from "@/components/QuizOptionsModal";
 import { useQuiz } from "@/contexts/QuizContext";
-import React, { useState } from "react";
+import { navigate } from "vike/client/router";
 
 export default function Page() {
-  const { error, clearError } = useQuiz();
+  const { error, clearError, quizResult, recommendation } = useQuiz();
   const [showQuizOptions, setShowQuizOptions] = useState<boolean>(false);
+
+  const hasAResult = !!quizResult || !!recommendation;
 
   return (
     <div className="hero min-h-screen">
@@ -16,8 +19,13 @@ export default function Page() {
           <h1 className="mb-5 text-5xl font-bold">Gauge Your Skill Level</h1>
           <h2 className="mb-5 text-3xl font-bold">Get AI Recommendations For Upskilling</h2>
           <p className="mb-5 text-xl">Select a language and level to start the quiz.</p>
+          {hasAResult && (
+            <button className="btn btn-primary" onClick={() => navigate("/result")}>
+              View Your Result
+            </button>
+          )}
           <button className="btn btn-primary" onClick={() => setShowQuizOptions(true)}>
-            Get Started
+            {hasAResult ? "Start New Quiz" : "Start Quiz"}
           </button>
         </div>
       </div>

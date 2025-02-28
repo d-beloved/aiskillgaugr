@@ -9,9 +9,11 @@ export default function Page() {
   const { session, quizPreferences, submitAnswer, isLoading, error, clearError } = useQuiz();
 
   useEffect(() => {
-    if (!quizPreferences || !session) {
-      navigate("/");
-      return;
+    if (!session) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      return () => clearTimeout(timer);
     }
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -23,21 +25,21 @@ export default function Page() {
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [quizPreferences, session]);
+  }, [session]);
 
-  if (isLoading || !quizPreferences || !session) {
+  if (isLoading || !session) {
     return <div className="loading loading-spinner"></div>;
   }
 
-  const { language, level, quizCount } = quizPreferences;
+  const { language, level, quizCount } = quizPreferences!;
   const { questions, currentIndex } = session;
 
   const currentQuestion = questions[currentIndex];
   const lastQuestion = currentIndex === questions.length - 1;
 
-  const handleSubmitAnswer = (answer: string) => {
-    submitAnswer(answer, lastQuestion);
-    if (lastQuestion) {
+  const handleSubmitAnswer = async (answer: string) => {
+    const shouldNavigate = await submitAnswer(answer, lastQuestion);
+    if (shouldNavigate) {
       navigate("/result");
     }
   };
