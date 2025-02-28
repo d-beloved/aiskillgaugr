@@ -17,6 +17,7 @@ export default function SessionWarning() {
   }, [session]);
 
   if (!session || timeLeft === 0) return null;
+  // const timeUp = !session || timeLeft === 0;
 
   const minutes = Math.floor(timeLeft / (60 * 1000));
   const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
@@ -24,8 +25,10 @@ export default function SessionWarning() {
   return (
     <div className="alert alert-warning">
       <span>
+        {/* TODO: it should automatically submit once time is up */}
         Quiz Session expires in {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
       </span>
+      <span>Please don't close the tab or navigate away from the page.</span>
     </div>
   );
 }
