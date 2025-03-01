@@ -27,10 +27,10 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         options: [
           "null is a number, undefined is a string",
           "null is an object, undefined is a primitive value",
-          "null means no value, undefined means not declared",
+          "null is an intentionally empty value, undefined means a value hasn't been assigned",
           "all of the above",
         ],
-        correctAnswer: "null means no value, undefined means not declared",
+        correctAnswer: "null is an intentionally empty value, undefined means a value hasn't been assigned",
         topic: "Data Types",
       },
       {
@@ -59,16 +59,16 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         question: "What is the difference between == and === in JavaScript?",
         options: [
           "== checks for value equality, === checks for type equality",
+          "== performs type coercion before comparison, === checks value and type without coercion",
           "== checks for type equality, === checks for value equality",
           "== checks for both value and type equality",
-          "none of the above",
         ],
-        correctAnswer: "== checks for value equality, === checks for both value and type equality",
+        correctAnswer: "== performs type coercion before comparison, === checks value and type without coercion",
         topic: "Operators",
       },
       {
         id: "js-i-2",
-        question: "What is the purpose of the this keyword in JavaScript?",
+        question: "What is the purpose of the 'this' keyword in JavaScript?",
         options: [
           "To refer to the global object",
           "To refer to the current function",
@@ -108,10 +108,10 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         options: [
           "async/await is used for synchronous code, promises are used for asynchronous code",
           "async/await is used for asynchronous code, promises are used for synchronous code",
+          "async/await provides a more synchronous-looking syntax for handling promises",
           "async/await and promises are interchangeable",
-          "none of the above",
         ],
-        correctAnswer: "async/await is used for asynchronous code, promises are used for asynchronous code",
+        correctAnswer: "async/await provides a more synchronous-looking syntax for handling promises",
         topic: "Asynchronous Programming",
       },
     ],
@@ -134,10 +134,11 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         options: [
           "WeakMap is used for caching, Map is used for data storage",
           "WeakMap is used for data storage, Map is used for caching",
-          "WeakMap allows for garbage collection, Map does not",
+          "WeakMap only accepts objects as keys and allows them to be garbage collected, Map accepts any type as keys",
           "none of the above",
         ],
-        correctAnswer: "WeakMap allows for garbage collection, Map does not",
+        correctAnswer:
+          "WeakMap only accepts objects as keys and allows them to be garbage collected, Map accepts any type as keys",
         topic: "Data Structures",
       },
       {
@@ -221,12 +222,13 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         id: "ts-b-4",
         question: "What is the difference between type and interface in TypeScript?",
         options: [
-          "type is used for primitive types, interface is used for object types",
+          "interfaces can be merged and are more extensible, types can unite/intersect and represent any kind of type",
           "type is used for object types, interface is used for primitive types",
           "type and interface are interchangeable",
           "none of the above",
         ],
-        correctAnswer: "type is used for primitive types, interface is used for object types",
+        correctAnswer:
+          "interfaces can be merged and are more extensible, types can unite/intersect and represent any kind of type",
         topic: "Types",
       },
       {
@@ -247,12 +249,12 @@ export const BaseQuestions: { [language: string]: LevelQuestions } = {
         id: "ts-i-1",
         question: "What is the purpose of the extends keyword in TypeScript?",
         options: [
-          "To inherit from a parent class",
+          "To inherit from a parent class or to constrain generic types",
           "To implement an interface",
           "To extend a type",
           "To create a new class",
         ],
-        correctAnswer: "To inherit from a parent class",
+        correctAnswer: "To inherit from a parent class or to constrain generic types",
         topic: "Classes",
       },
       {
