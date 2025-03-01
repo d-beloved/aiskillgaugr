@@ -11,22 +11,29 @@ export default function Page() {
   const hasAResult = !!quizResult || !!recommendation;
 
   return (
-    <div className="hero min-h-screen">
-      {error && <ErrorAlert error={error} onRetry={clearError} onDismiss={clearError} />}
-      <div className="hero-overlay"></div>
-      <div className="hero-content text-neutral-content text-center">
-        <div className="max-w-2xl">
-          <h1 className="mb-5 text-5xl font-bold">Gauge Your Skill Level</h1>
-          <h2 className="mb-5 text-3xl font-bold">Get AI Recommendations For Upskilling</h2>
-          <p className="mb-5 text-xl">Select a language and level to start the quiz.</p>
-          {hasAResult && (
-            <button className="btn btn-primary" onClick={() => navigate("/result")}>
-              View Your Result
+    <div className="flex justify-center items-center h-[80vh]">
+      <div className="max-w-4xl w-full px-4">
+        {error && <ErrorAlert error={error} onRetry={clearError} onDismiss={clearError} />}
+        <div className="text-center space-y-8">
+          <h1 className="text-5xl md:text-6xl font-bold text-white animate-fade-in">Gauge Your Skill Level</h1>
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-300">Get AI Recommendations For Upskilling</h2>
+          <p className="text-xl text-gray-400">Select a language and level to start the quiz</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            {hasAResult && (
+              <button
+                className="btn btn-primary btn-lg hover:scale-105 transition-transform"
+                onClick={() => navigate("/result")}
+              >
+                View Result
+              </button>
+            )}
+            <button
+              className="btn btn-secondary btn-lg hover:scale-105 transition-transform"
+              onClick={() => setShowQuizOptions(true)}
+            >
+              {hasAResult ? "Start New Quiz" : "Start Quiz"}
             </button>
-          )}
-          <button className="btn btn-primary" onClick={() => setShowQuizOptions(true)}>
-            {hasAResult ? "Start New Quiz" : "Start Quiz"}
-          </button>
+          </div>
         </div>
       </div>
       {showQuizOptions && <QuizOptionsModal showModal={showQuizOptions} onClose={() => setShowQuizOptions(false)} />}

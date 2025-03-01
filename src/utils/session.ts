@@ -71,5 +71,7 @@ export const sessionManager = {
   clear(): void {
     localStorage.removeItem("currentQuiz");
     localStorage.removeItem("quizPreferences");
+    localStorage.removeItem("quizResult");
+    localStorage.removeItem("recommendation");
   },
 };

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuiz } from "@/contexts/QuizContext";
 
 export default function SessionWarning() {
@@ -21,14 +21,42 @@ export default function SessionWarning() {
 
   const minutes = Math.floor(timeLeft / (60 * 1000));
   const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+  const isLowTime = minutes < 13;
 
+  {
+    /* TODO: it should automatically submit once time is up */
+  }
   return (
-    <div className="alert alert-warning">
-      <span>
-        {/* TODO: it should automatically submit once time is up */}
-        Quiz Session expires in {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-      </span>
-      <span>Please don't close the tab or navigate away from the page.</span>
+    <div
+      className={`flex items-center gap-3 rounded-lg p-3 shadow-lg ${
+        isLowTime ? "bg-error/10 text-error" : "bg-warning/10 text-warning"
+      }`}
+    >
+      <div className="flex-none">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`h-6 w-6 ${isLowTime ? "animate-pulse" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
+      <div className="flex flex-col">
+        <div className="font-semibold">
+          Time Remaining:{" "}
+          <span className="font-mono">
+            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          </span>
+        </div>
+        <p className="text-sm opacity-75">Please don't close this tab or navigate away</p>
+      </div>
     </div>
   );
 }

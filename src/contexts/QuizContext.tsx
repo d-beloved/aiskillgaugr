@@ -43,6 +43,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { language, level, quizCount } = prefs;
     setIsLoading(true);
     setError(null);
+    if (quizResult) resetQuiz();
     try {
       const questions = await startQuiz(language, level, +quizCount);
       const newSession = {
@@ -102,6 +103,8 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetQuiz = () => {
     setSession(null);
     setPreferences(null);
+    setQuizResult(null);
+    setRecommendation("");
     sessionManager.clear();
   };
 

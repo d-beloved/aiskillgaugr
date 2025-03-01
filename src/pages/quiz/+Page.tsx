@@ -28,7 +28,7 @@ export default function Page() {
   }, [session]);
 
   if (isLoading || !session) {
-    return <div className="loading loading-spinner"></div>;
+    return <div className="flex items-center justify-center min-h-[80vh] loading loading-spinner"></div>;
   }
 
   const { language, level, quizCount } = quizPreferences!;
@@ -57,22 +57,33 @@ export default function Page() {
   };
 
   return (
-    <div className="hero min-h-screen">
-      <div>
+    <div className="min-h-[80vh] flex flex-col items-center p-4">
+      <div className="w-full max-w-4xl">
         {error && <ErrorAlert error={error} onDismiss={clearError} onRetry={handleRetry} />}
-        <SessionWarning />
-        <CacheStatus />
-        <h1>
-          {level} level {language} Quiz
-        </h1>
-        <h2>You have signed up to do {quizCount} questions</h2>
-        <div className="card w-96 bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Question {currentIndex + 1}</h2>
-            <p>{currentQuestion.question}</p>
-            <div className="flex flex-col gap-2">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+          <SessionWarning />
+          <CacheStatus />
+        </div>
+
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">
+            {level} level {language} Quiz
+          </h1>
+          <h2 className="text-xl text-gray-300">
+            Question {currentIndex + 1} of {questions.length}
+          </h2>
+        </div>
+
+        <div className="card bg-gray-800 shadow-xl p-6 w-full">
+          <div className="mb-8">
+            <h3 className="text-xl text-white mb-4">{currentQuestion.question}</h3>
+            <div className="grid gap-4">
               {currentQuestion.options.map((option, index) => (
-                <button key={index} className="btn btn-primary" onClick={() => handleSubmitAnswer(option)}>
+                <button
+                  key={index}
+                  className="btn btn-outline btn-primary text-left text-white p-4 hover:scale-102 transition-transform"
+                  onClick={() => handleSubmitAnswer(option)}
+                >
                   {option}
                 </button>
               ))}
