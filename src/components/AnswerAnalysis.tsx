@@ -8,20 +8,24 @@ interface AnswerAnalysisProps {
 
 const AnswerAnalysis: FC<AnswerAnalysisProps> = ({ questions, answers }) => {
   return (
-    <div className="collapse-group">
+    <div className="collapse-group space-y-2 animate-fade-in">
       {questions.map((question, index) => {
         const isCorrect = answers[index] === question.correctAnswer;
+        const animationDelay = `${index * 100}ms`;
 
         return (
           <div
             key={index}
-            className={`collapse collapse-arrow mb-2 border ${
-              isCorrect ? "border-success/20 bg-success/10" : "border-error/20 bg-error/10"
-            }`}
+            className={`collapse collapse-arrow mb-2 border backdrop-blur-sm ${
+              isCorrect
+                ? "border-success/20 bg-success/10 hover:bg-success/20"
+                : "border-error/20 bg-error/10 hover:bg-error/20"
+            } transition-colors duration-300 animate-scale-in`}
+            style={{ animationDelay }}
           >
             <input type="checkbox" />
-            <div className="collapse-title flex items-center gap-2">
-              <div className={`badge ${isCorrect ? "badge-success" : "badge-error"} gap-1`}>
+            <div className="collapse-title flex items-center gap-3">
+              <div className={`badge ${isCorrect ? "badge-success" : "badge-error"} gap-1 p-3`}>
                 <span>{index + 1}</span>
                 {isCorrect ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -41,18 +45,20 @@ const AnswerAnalysis: FC<AnswerAnalysisProps> = ({ questions, answers }) => {
                   </svg>
                 )}
               </div>
-              <span className="font-medium">{question.question}</span>
+              <span className="font-medium text-slate-100">{question.question}</span>
             </div>
-            <div className="collapse-content">
-              <div className="mt-2 space-y-2 text-sm">
-                <div className="flex flex-col gap-1">
-                  <span className="text-gray-400">Your answer:</span>
-                  <span className={isCorrect ? "text-success" : "text-error"}>{answers[index]}</span>
+            <div className="collapse-content animate-slide-up">
+              <div className="mt-2 space-y-3 text-sm">
+                <div className="flex flex-col gap-2">
+                  <span className="text-slate-400">Your answer:</span>
+                  <span className={`${isCorrect ? "text-success/90" : "text-error/90"} font-medium`}>
+                    {answers[index]}
+                  </span>
                 </div>
                 {!isCorrect && (
-                  <div className="flex flex-col gap-1">
-                    <span className="text-gray-400">Correct answer:</span>
-                    <span className="text-success">{question.correctAnswer}</span>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-slate-400">Correct answer:</span>
+                    <span className="text-success/90 font-medium">{question.correctAnswer}</span>
                   </div>
                 )}
               </div>

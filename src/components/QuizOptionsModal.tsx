@@ -47,11 +47,12 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
 
   return (
     <dialog className={`modal ${showModal ? "modal-open" : ""}`}>
-      <div className="modal-box bg-gray-800 text-white">
-        <h3 className="font-bold text-2xl mb-6">Quiz Preferences</h3>
+      <div className="modal-box bg-slate-800/90 backdrop-blur-sm text-white animate-scale-in">
+        <h3 className="font-bold text-2xl mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+          Quiz Preferences
+        </h3>
         {quizResult && (
-          // <div className="tooltip tooltip-bottom" data-tip="Questions loaded from previous session">
-          <div className="flex items-center gap-2 p-3 bg-red-500/10 rounded-lg mb-6">
+          <div className="flex items-center gap-2 p-3 bg-red-500/10 rounded-lg mb-6 animate-fade-in">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 stroke-current"
@@ -71,13 +72,12 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="form-control">
+          <div className="form-control animate-slide-up" style={{ "--delay": "100ms" } as React.CSSProperties}>
             <select
-              id="language"
+              className="select select-bordered w-full bg-slate-700/50 focus:outline-none 
+                         border-slate-600 focus:border-primary transition-colors"
               value={language}
               onChange={(e) => handlePreferenceChange("language", e.target.value)}
-              required
-              className="select select-bordered w-full bg-gray-700 focus:outline-none"
             >
               <option value="" disabled>
                 Select a Programming Language
@@ -90,13 +90,12 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
             </select>
           </div>
 
-          <div className="form-control">
+          <div className="form-control animate-slide-up" style={{ "--delay": "200ms" } as React.CSSProperties}>
             <select
-              id="level"
+              className="select select-bordered w-full bg-slate-700/50 focus:outline-none 
+                         border-slate-600 focus:border-primary transition-colors"
               value={level}
               onChange={(e) => handlePreferenceChange("level", e.target.value)}
-              required
-              className="select select-bordered w-full bg-gray-700 focus:outline-none"
             >
               <option value="" disabled>
                 Select a Difficulty Level
@@ -109,13 +108,12 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
             </select>
           </div>
 
-          <div className="form-control">
+          <div className="form-control animate-slide-up" style={{ "--delay": "300ms" } as React.CSSProperties}>
             <select
-              id="quizCount"
               value={quizCount}
               onChange={(e) => handlePreferenceChange("quizCount", e.target.value)}
-              required
-              className="select select-bordered w-full bg-gray-700 focus:outline-none"
+              className="select select-bordered w-full bg-slate-700/50 focus:outline-none 
+                         border-slate-600 focus:border-primary transition-colors"
             >
               <option value="" disabled>
                 Select Number of Questions
@@ -128,8 +126,8 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
             </select>
           </div>
 
-          <div className="modal-action">
-            <button type="button" className="btn btn-ghost" onClick={onClose} disabled={isLoading}>
+          <div className="modal-action animate-slide-up" style={{ "--delay": "400ms" } as React.CSSProperties}>
+            <button type="button" className="btn btn-ghost hover:bg-slate-700/50" onClick={onClose}>
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={!isReady || isLoading}>
@@ -138,7 +136,7 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
           </div>
         </form>
       </div>
-      <form method="dialog" className="modal-backdrop">
+      <form method="dialog" className="modal-backdrop bg-slate-900/80">
         <button onClick={onClose}>close</button>
       </form>
     </dialog>

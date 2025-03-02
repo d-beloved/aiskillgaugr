@@ -21,21 +21,20 @@ export default function SessionWarning() {
 
   const minutes = Math.floor(timeLeft / (60 * 1000));
   const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-  const isLowTime = minutes < 13;
+  const isLowTime = minutes < 2;
 
   {
     /* TODO: it should automatically submit once time is up */
   }
   return (
     <div
-      className={`flex items-center gap-3 rounded-lg p-3 shadow-lg ${
-        isLowTime ? "bg-error/10 text-error" : "bg-warning/10 text-warning"
-      }`}
+      className={`flex items-center gap-3 rounded-lg p-3 shadow-lg animate-pulse-slow
+      ${isLowTime ? "bg-red-500/10 text-red-400" : "bg-yellow-500/10 text-yellow-400"}`}
     >
       <div className="flex-none">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-6 w-6 ${isLowTime ? "animate-pulse" : ""}`}
+          className={`h-6 w-6 ${isLowTime ? "animate-pulse-slow" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

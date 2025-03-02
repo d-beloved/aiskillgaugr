@@ -14,4 +14,15 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  css: {
+    // Enable CSS modules
+    modules: {
+      localsConvention: "camelCase",
+    },
+    // Enable source maps
+    devSourcemap: true,
+  },
+  optimizeDeps: {
+    include: ["tailwindcss", "daisyui"],
+  },
 });

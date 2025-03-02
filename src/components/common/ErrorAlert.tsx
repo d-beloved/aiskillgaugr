@@ -15,9 +15,9 @@ export default function ErrorAlert({ error, onRetry, onDismiss }: Props) {
   };
 
   return (
-    <div className="alert alert-error shadow-lg mb-4 animate-fade-in">
-      <div className="flex-1">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24">
+    <div className="alert alert-error shadow-lg mb-4 animate-slide-up bg-red-500/10 border border-red-500/20">
+      <div className="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -26,18 +26,18 @@ export default function ErrorAlert({ error, onRetry, onDismiss }: Props) {
           />
         </svg>
         <div className="flex flex-col">
-          <span className="text-sm opacity-90">{error.message || errorMessages[error.type]}</span>
-          {error.details && <span className="text-xs opacity-75">{error.details}</span>}
+          <span className="font-bold text-red-400">{error.message || errorMessages[error.type]}</span>
+          {error.details && <span className="text-sm text-red-300">{error.details}</span>}
         </div>
       </div>
       <div className="flex-none gap-2">
         {onRetry && (
-          <button onClick={onRetry} className="btn btn-ghost btn-sm normal-case">
+          <button onClick={onRetry} className="btn btn-ghost btn-sm hover:bg-red-500/20 text-red-400">
             Retry
           </button>
         )}
         {onDismiss && (
-          <button onClick={onDismiss} className="btn btn-ghost btn-sm normal-case">
+          <button onClick={onDismiss} className="btn btn-ghost btn-sm hover:bg-red-500/20 text-red-400">
             Dismiss
           </button>
         )}

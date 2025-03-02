@@ -20,8 +20,16 @@ export default function CacheStatus() {
 
   return (
     <div className="tooltip tooltip-bottom" data-tip="Questions loaded from previous session">
-      <div className="badge badge-info gap-2 p-4 shadow-md hover:badge-info-focus transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24">
+      <div
+        className="badge bg-primary/10 text-primary gap-2 p-4 shadow-lg 
+                    hover:bg-primary/20 transition-all duration-300 animate-fade-in"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-5 h-5 stroke-current animate-pulse-slow"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         <span className="font-medium">Using cached questions</span>

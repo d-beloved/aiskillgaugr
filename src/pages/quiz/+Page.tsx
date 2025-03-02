@@ -28,7 +28,11 @@ export default function Page() {
   }, [session]);
 
   if (isLoading || !session) {
-    return <div className="flex items-center justify-center min-h-[80vh] loading loading-spinner"></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="loading loading-spinner loading-lg"></div>
+      </div>
+    );
   }
 
   const { language, level, quizCount } = quizPreferences!;
@@ -57,7 +61,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center p-4">
+    <div className="min-h-screen flex flex-col items-center p-4 animate-fade-in">
       <div className="w-full max-w-4xl">
         {error && <ErrorAlert error={error} onDismiss={clearError} onRetry={handleRetry} />}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
@@ -65,7 +69,7 @@ export default function Page() {
           <CacheStatus />
         </div>
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 animate-slide-up">
           <h1 className="text-3xl font-bold text-white mb-2">
             {level} level {language} Quiz
           </h1>
@@ -74,14 +78,16 @@ export default function Page() {
           </h2>
         </div>
 
-        <div className="card bg-gray-800 shadow-xl p-6 w-full">
+        <div className="card bg-slate-800/50 backdrop-blur shadow-xl p-6 w-full animate-scale-in">
           <div className="mb-8">
             <h3 className="text-xl text-white mb-4">{currentQuestion.question}</h3>
             <div className="grid gap-4">
               {currentQuestion.options.map((option, index) => (
                 <button
                   key={index}
-                  className="btn btn-outline btn-primary text-left text-white p-4 hover:scale-102 transition-transform"
+                  className="btn bg-slate-700/50 hover:bg-slate-600/50 text-left text-white p-4 
+                           transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
+                           border border-slate-600/50 hover:border-slate-500/50"
                   onClick={() => handleSubmitAnswer(option)}
                 >
                   {option}
