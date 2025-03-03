@@ -2,7 +2,7 @@ import { LevelQuestions, LevelTopics } from "@/types";
 
 export const Languages = ["JavaScript", "TypeScript"];
 export const Levels = ["Beginner", "Intermediate", "Advanced"];
-export const QuizCounts = [10, 20, 30];
+export const QuizCounts = [10, 20];
 
 export const BaseQuestions: { [language: string]: LevelQuestions } = {
   javascript: {

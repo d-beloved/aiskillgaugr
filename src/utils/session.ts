@@ -1,13 +1,14 @@
 import { QuizData, QuizPreference, QuizResults } from "@/types";
 
-const SESSION_DURATION = 0.25 * 60 * 60 * 1000; // 15 mins
-// TODO: implement different timings based on number of quiz selected
+export const TEN_MINUTES = 10 * 60 * 1000;
+const TWENTY_MINUTES = 20 * 60 * 1000;
 
 export const sessionManager = {
-  create(): Pick<QuizData, "timestamp" | "expiresIn" | "isExpired"> {
+  create(count: string): Pick<QuizData, "timestamp" | "expiresIn" | "isExpired"> {
+    const sessionDuration = count === "10" ? TEN_MINUTES : TWENTY_MINUTES;
     return {
       timestamp: Date.now(),
-      expiresIn: SESSION_DURATION,
+      expiresIn: sessionDuration,
       isExpired: false,
     };
   },
