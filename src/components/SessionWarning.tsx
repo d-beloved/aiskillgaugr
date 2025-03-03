@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useQuiz } from "@/contexts/QuizContext";
+import { TEN_MINUTES } from "@/utils/session";
 
-export default function SessionWarning() {
+interface SessionWarningProps {
+  onTimeUp: () => void;
+}
+
+export default function SessionWarning({ onTimeUp }: SessionWarningProps) {
   const { session } = useQuiz();
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<number>(TEN_MINUTES);
 
   useEffect(() => {
     if (!session) return;
@@ -16,16 +21,12 @@ export default function SessionWarning() {
     return () => clearInterval(interval);
   }, [session]);
 
-  if (!session || timeLeft === 0) return null;
-  // const timeUp = !session || timeLeft === 0;
+  if (!session || timeLeft === 0) onTimeUp();
 
   const minutes = Math.floor(timeLeft / (60 * 1000));
   const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
   const isLowTime = minutes < 2;
 
-  {
-    /* TODO: it should automatically submit once time is up */
-  }
   return (
     <div
       className={`flex items-center gap-3 rounded-lg p-3 shadow-lg animate-pulse-slow
@@ -54,7 +55,11 @@ export default function SessionWarning() {
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </span>
         </div>
-        <p className="text-sm opacity-75">Please don't close this tab or navigate away</p>
+        <p className="text-sm opacity-75">
+          {isLowTime
+            ? "When the time is up, your answers will be submitted"
+            : "Please don't close this tab or navigate away"}
+        </p>
       </div>
     </div>
   );
