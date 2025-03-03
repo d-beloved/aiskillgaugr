@@ -6,6 +6,11 @@ import logoUrl from "../assets/guagrIcon.png";
 export default function HeadDefault() {
   const gaKey = import.meta.env.PUBLIC_ENV__GOOGLE_ANALYTICS;
 
+  if (!gaKey || gaKey === "G-XXXXXXXXXX") {
+    console.warn("Missing or invalid Google Analytics key");
+    return <link rel="icon" href={logoUrl} />;
+  }
+
   return (
     <>
       <link rel="icon" href={logoUrl} />
@@ -17,9 +22,10 @@ export default function HeadDefault() {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '${gaKey}');`,
+          gtag('config', '${gaKey}');
+        `,
         }}
-      ></script>
+      />
     </>
   );
 }

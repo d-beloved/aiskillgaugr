@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { navigate } from "vike/client/router";
 import ReactMarkdown from "react-markdown";
 import { useQuiz } from "@/contexts/QuizContext";
 import ErrorAlert from "@/components/common/ErrorAlert";
 import AnswerAnalysis from "@/components/AnswerAnalysis";
+import { event } from "@/utils/analytics";
 
 export default function QuizResult() {
   const { quizPreferences, quizResult, error, clearError, isLoading, recommendation, getRecommendation } = useQuiz();
@@ -32,6 +33,17 @@ export default function QuizResult() {
 
   const handleGetRecommendation = () => {
     getRecommendation(quizPreferences!, questions, answers, score);
+  };
+
+  const handleViewRecommendation = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      event({
+        action: "view_recommendation",
+        category: "Quiz",
+        label: `${quizPreferences?.language}-${quizPreferences?.level}-${quizPreferences?.quizCount}`,
+        value: score,
+      });
+    }
   };
 
   return (
@@ -82,7 +94,7 @@ export default function QuizResult() {
               className="animate-fade-in collapse collapse-arrow border backdrop-blur-sm 
               border-slate-400/20 bg-slate-300/10 transition-colors duration-300 animate-scale-in"
             >
-              <input type="checkbox" />
+              <input type="checkbox" onChange={handleViewRecommendation} />
               <div className="collapse-title flex items-center">View Recommendation</div>
               <div className="collapse-content animate-slide-up overflow-auto">
                 <p className="whitespace-pre-wrap text-slate-300">

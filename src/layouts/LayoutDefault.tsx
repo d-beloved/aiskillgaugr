@@ -5,6 +5,15 @@ import React from "react";
 import { QuizProvider } from "@/contexts/QuizContext";
 import Footer from "@/components/Footer";
 import logo from "../assets/guagrLogo.png";
+import { event } from "@/utils/analytics";
+
+export const handleVisitRepository = () => {
+  event({
+    action: "visit_github_repo",
+    category: "Github",
+    label: `${window.location.pathname}`,
+  });
+};
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
@@ -20,6 +29,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-ghost btn-sm normal-case gap-2 text-white/80 hover:text-white transition-colors"
+              onClick={handleVisitRepository}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

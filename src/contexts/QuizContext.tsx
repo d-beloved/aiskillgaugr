@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { fetchAIRecommendations, startQuiz } from "@/services/quiz.service";
 import { AppError, QuizContextType, QuizData, QuizPreference, QuizQuestion, QuizResults, RecoveredData } from "@/types";
 import { sessionManager } from "@/utils/session";
+import { event } from "@/utils/analytics";
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
@@ -40,6 +41,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const clearError = () => setError(null);
 
   const startNewQuiz = async (prefs: QuizPreference) => {
+    event({ action: "start_quiz", category: "Quiz", label: `${prefs.language}-${prefs.level}-${prefs.quizCount}` });
     const { language, level, quizCount } = prefs;
     setIsLoading(true);
     setError(null);
@@ -82,6 +84,8 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionManager.updateSession(newSession);
 
     if (isLastQuestion) {
+      const { language, level, quizCount } = quizPreferences!;
+      event({ action: "complete_quiz", category: "Quiz", label: `${language}-${level}-${quizCount}` });
       const { answers, questions } = newSession;
       const quizScore = answers.filter((a, index) => a === questions[index].correctAnswer).length;
       const scorePercent = ((quizScore / questions.length) * 100).toFixed(2);
@@ -116,6 +120,12 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   ) => {
     setIsLoading(true);
     try {
+      event({
+        action: "get_recommendation",
+        category: "quiz_result",
+        label: `${prefs.language}-${prefs.level}-${prefs.quizCount}`,
+        value: score,
+      });
       const AIRecommendation = await fetchAIRecommendations(prefs, questions, answers, score);
       setRecommendation(AIRecommendation);
       sessionManager.saveRecommendation(AIRecommendation);

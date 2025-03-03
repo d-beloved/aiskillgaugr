@@ -5,7 +5,7 @@ import { sendPrompt } from "../routes/utils/sendPrompt";
 export const getRecommendation = async (req: Request, res: Response) => {
   const { preferences, questions, answers, score } = req.body;
 
-  if (!preferences || !questions || !answers || !score) {
+  if (!preferences || !questions || !answers || score == null) {
     res.status(400).json({ error: "Missing the required fields" });
     return;
   }

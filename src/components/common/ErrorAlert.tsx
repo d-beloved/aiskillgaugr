@@ -1,4 +1,6 @@
 import { AppError } from "@/types";
+import { event } from "@/utils/analytics";
+import { useEffect } from "react";
 
 interface Props {
   error: AppError;
@@ -12,6 +14,18 @@ export default function ErrorAlert({ error, onRetry, onDismiss }: Props) {
     CACHE_ERROR: "There was an error loading saved questions.",
     API_ERROR: "Failed to generate new questions.",
     NETWORK_ERROR: "Please check your internet connection.",
+  };
+
+  useEffect(() => {
+    hasError();
+  }, []);
+
+  const hasError = () => {
+    event({
+      action: "has_error",
+      category: "Error",
+      label: `${window.location.pathname} - ${error.type} - ${error.message}`,
+    });
   };
 
   return (
