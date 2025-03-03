@@ -46,8 +46,11 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
 
     let cleanText = response.generated_text
       .trim()
-      .replace(/```javascript|```json|```|\n|\/\/.*$/gm, "") // Remove markdown and comments
-      .replace(/const\s+questions\s+=\s+/, "") // Remove variable declaration
+      .replace(/^```(javascript|json)\s*|\s*```$/gm, "")
+      .replace(/^const\s+questions\s+=\s+/m, "")
+      .replace(/`([^`]+)`/g, (match, code) => {
+        return code.replace(/"/g, '\\"');
+      })
       .trim();
 
     // Extract the array portion if multiple arrays are present
@@ -56,14 +59,34 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
       throw new Error("No valid JSON array found in response");
     }
 
-    const generatedQuestions: QuizQuestion[] = JSON.parse(arrayMatch[0]);
+    try {
+      const questions = JSON.parse(arrayMatch[0]);
+      const formattedQuestions = questions.map((question: QuizQuestion, index: number) => ({
+        ...question,
+        id: `${language.toLowerCase()}-${level.toLowerCase()}-${index + 1}`,
+      }));
 
-    const formattedQuestions = generatedQuestions.map((question, index) => ({
-      ...question,
-      id: `${language.toLowerCase()}-${level.toLowerCase()}-${index + 1}`,
-    }));
+      res.json({ questions: formattedQuestions });
+    } catch (parseError) {
+      // If direct parsing fails, try cleaning the string
+      const cleanedString = arrayMatch[0]
+        .replace(/\\"/g, '"')
+        .replace(/\\/g, "")
+        .replace(/"([^"]*)"/g, (_, content) => `"${content.replace(/"/g, '\\"')}"`);
 
-    res.json({ questions: formattedQuestions });
+      try {
+        const questions = JSON.parse(cleanedString);
+        const formattedQuestions = questions.map((question: QuizQuestion, index: number) => ({
+          ...question,
+          id: `${language.toLowerCase()}-${level.toLowerCase()}-${index + 1}`,
+        }));
+
+        res.json({ questions: formattedQuestions });
+      } catch (secondParseError) {
+        console.error("Second JSON Parse Error:", secondParseError, "trying to parse:", cleanedString);
+        throw new Error("Failed to parse questions after cleaning");
+      }
+    }
   } catch (error) {
     console.error("Error generating questions:", error);
     res.status(500).json({
