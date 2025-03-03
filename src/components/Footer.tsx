@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="footer footer-center p-4 bg-slate-800/50 backdrop-blur-sm text-slate-300 mt-auto border-t border-slate-700/50">
+    <footer className="footer footer-center p-4 bg-slate-800/20 backdrop-blur-sm text-slate-300 mt-auto border-t border-slate-700/50">
       <div className="flex flex-col md:flex-row items-center justify-center gap-4">
         <p className="opacity-75 hover:opacity-100 transition-opacity">© 2025 AISkillGaugr - All rights reserved</p>
         <div className="flex items-center gap-4">

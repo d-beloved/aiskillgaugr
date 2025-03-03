@@ -19,9 +19,9 @@ export default function CacheStatus() {
   if (!isPreexistingCache) return null;
 
   return (
-    <div className="tooltip tooltip-bottom" data-tip="Questions loaded from previous session">
+    <div className="tooltip tooltip-top tooltip-info" data-tip="These Questions are loaded from previous session">
       <div
-        className="badge bg-primary/10 text-primary gap-2 p-4 shadow-lg 
+        className="badge bg-primary/30 text-info gap-2 p-4 shadow-lg 
                     hover:bg-primary/20 transition-all duration-300 animate-fade-in"
       >
         <svg

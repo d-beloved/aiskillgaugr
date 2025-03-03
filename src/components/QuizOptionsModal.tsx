@@ -55,7 +55,7 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
           <div className="flex items-center gap-2 p-3 bg-red-500/10 rounded-lg mb-6 animate-fade-in">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 stroke-current"
+              className="h-5 w-5 stroke-current hidden md:block"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -130,7 +130,7 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
             <button type="button" className="btn btn-ghost hover:bg-slate-700/50" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={!isReady || isLoading}>
+            <button type="submit" className="btn btn-primary sm:w-1/2 md:w-[29%]" disabled={!isReady || isLoading}>
               {isLoading ? <span className="loading loading-spinner"></span> : "Start Quiz"}
             </button>
           </div>
