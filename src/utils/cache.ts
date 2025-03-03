@@ -9,7 +9,8 @@ interface CachedData {
 
 export const cacheManager = {
   generateKey(preferences: QuizPreference): string {
-    return `quiz-cache-${preferences.language}-${preferences.level}`;
+    const { language, level, quizCount } = preferences;
+    return `quiz-cache-${language}-${level}-${quizCount}`;
   },
 
   get(preferences: QuizPreference): CachedData | null {
@@ -20,7 +21,7 @@ export const cacheManager = {
     if (!cachedData) return null;
 
     const { questions, timestamp } = JSON.parse(cachedData);
-    const isValid = Date.now() - timestamp < CACHE_DURATION;
+    const isValid = Date.now() - timestamp < CACHE_DURATION && questions.length > 5;
 
     return isValid ? { questions, timestamp } : null;
   },
