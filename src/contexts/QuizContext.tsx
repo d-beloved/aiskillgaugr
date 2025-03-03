@@ -51,7 +51,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentIndex: 0,
         answers: [],
         isComplete: false,
-        ...sessionManager.create(),
+        ...sessionManager.create(quizCount),
       };
       setSession(newSession);
       setPreferences(prefs);

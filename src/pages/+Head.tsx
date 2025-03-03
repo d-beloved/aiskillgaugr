@@ -1,7 +1,7 @@
 // https://vike.dev/Head
 
 import React from "react";
-import logoUrl from "../assets/logo.svg";
+import logoUrl from "../assets/guagrIcon.png";
 
 export default function HeadDefault() {
   const gaKey = import.meta.env.PUBLIC_ENV__GOOGLE_ANALYTICS;
