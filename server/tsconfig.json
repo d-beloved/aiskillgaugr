@@ -2,9 +2,17 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../dist/server",
-    "module": "ES2015",
-    "target": "ES2022"
+    "module": "ESNext",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "types": ["node"]
   },
-  "include": ["./**/*"],
-  "exclude": ["node_modules"]
+  "include": ["index.ts", "routes/**/*", "services/**/*"],
+  "exclude": ["node_modules", "dist", "../src/**/*"]
 }

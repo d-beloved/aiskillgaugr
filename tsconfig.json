@@ -9,16 +9,17 @@
     "allowJs": true,
     "module": "ESNext",
     "noEmit": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["vite/client", "vike-react", "vite-plugin-vercel/types"],
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "server"]
 }

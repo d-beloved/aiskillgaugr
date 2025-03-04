@@ -1,4 +1,4 @@
-import { LevelQuestions, LevelTopics } from "@/types";
+import { LevelQuestions, LevelTopics } from "../types";
 
 export const Languages = ["JavaScript", "TypeScript"];
 export const Levels = ["Beginner", "Intermediate", "Advanced"];

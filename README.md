@@ -1,6 +1,14 @@
 # AISkillGaugr
 
-![Logo](/src/assets/guagrLogo.png "AIGuagr Logo")
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" style="background-color: #1e293b; padding: 20px; border-radius: 8px;">
+        <img src="./src/assets/guagrLogo.png" alt="AIGuagr Logo" width="400">
+      </td>
+    </tr>
+  </table>
+</div>
 
 AISkillGaugr is an AI-powered tool for assessing and improving programming skills through interactive quizzes and personalized recommendations.
 

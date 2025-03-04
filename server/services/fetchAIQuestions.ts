@@ -1,4 +1,4 @@
-import { QuizQuestion } from "../../src/types";
+import { QuizQuestion, TopicWeight } from "../../src/types";
 import { TopicWeights } from "../../src/constants";
 import { Request, Response } from "express";
 import { sendPrompt } from "../routes/utils/sendPrompt";
@@ -19,7 +19,7 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
     const topics = TopicWeights[language.toLowerCase()][level.toLowerCase()];
 
     const prompt = `Generate ${count} multiple choice questions for ${level} level ${language} programming.
-    Focus on these topics with their respective weights: ${topics.map((t) => `${t.topic}(${t.weight})`).join(", ")}.
+    Focus on these topics with their respective weights: ${topics.map((t: TopicWeight) => `${t.topic}(${t.weight})`).join(", ")}.
     
     Return a pure JSON array of questions without any additional text, comments, or markdown formatting.
       Each question should have this exact format:
