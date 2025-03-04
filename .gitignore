@@ -147,8 +147,8 @@ styled-system-studio
 
 .DS_Store
 
-# Vercel
-.vercel/
-
 # Keep files
 .keep
+.vercel
+
+stats.html
