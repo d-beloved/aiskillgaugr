@@ -1,56 +1,129 @@
-Generated with [Bati](https://batijs.dev) ([version 343](https://www.npmjs.com/package/create-bati/v/0.0.343)) using this command:
+# AISkillGaugr
 
-```sh
-pnpm create bati --react --tailwindcss --daisyui --google-analytics --vercel --eslint --prettier
+![Logo](/src/assets/guagrLogo.png "AIGuagr Logo")
+
+AISkillGaugr is an AI-powered tool for assessing and improving programming skills through interactive quizzes and personalized recommendations.
+
+## Features
+
+- 🧠 AI-powered skill assessment
+- 📊 Dynamic quiz generation for different programming languages
+- 🎯 Multiple difficulty levels (Beginner, Intermediate, Advanced)
+- 💾 Local progress saving
+- 📱 Responsive design
+- 🚀 Performance optimization with caching
+- 🔒 Privacy-focused analytics
+
+## Tech Stack
+
+- React with TypeScript
+- Vike for routing and SSR
+- TailwindCSS & DaisyUI for styling
+- Vitest for testing
+- Google Analytics for usage tracking
+- HuggingFace API for AI recommendations
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- pnpm (v8 or higher)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/d-beloved/aiskillgaugr.git
+cd aiskillgaugr
 ```
 
-## Contents
+2. Install dependencies:
 
-- [React](#react)
+```bash
+pnpm install
+```
 
-  - [`/pages/+config.ts`](#pagesconfigts)
-  - [Routing](#routing)
-  - [`/pages/_error/+Page.jsx`](#pages_errorpagejsx)
-  - [`/pages/+onPageTransitionStart.ts` and `/pages/+onPageTransitionEnd.ts`](#pagesonpagetransitionstartts-and-pagesonpagetransitionendts)
-  - [SSR](#ssr)
-  - [HTML Streaming](#html-streaming)
+3. Create a .env file:
 
-## React
+```env
+PUBLIC_ENV__GOOGLE_ANALYTICS=your_ga_id
+HUGGING_FACE_API_KEY=your_api_key
+```
 
-This app is ready to start. It's powered by [Vike](https://vike.dev) and [React](https://react.dev/learn).
+4. Start the development server:
 
-### `/pages/+config.ts`
+```bash
+pnpm dev
+```
 
-Such `+` files are [the interface](https://vike.dev/config) between Vike and your code. It defines:
+Visit `http://localhost:3000` to see the application.
 
-- A default [`<Layout>` component](https://vike.dev/Layout) (that wraps your [`<Page>` components](https://vike.dev/Page)).
-- A default [`title`](https://vike.dev/title).
-- Global [`<head>` tags](https://vike.dev/head-tags).
+## Available Scripts
 
-### Routing
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm test` - Run tests
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:coverage` - Run tests with coverage
+- `pnpm lint` - Lint code
 
-[Vike's built-in router](https://vike.dev/routing) lets you choose between:
+## Project Structure
 
-- [Filesystem Routing](https://vike.dev/filesystem-routing) (the URL of a page is determined based on where its `+Page.jsx` file is located on the filesystem)
-- [Route Strings](https://vike.dev/route-string)
-- [Route Functions](https://vike.dev/route-function)
+```
+aiskillgaugr/
+├── src/
+│   ├── components/     # Reusable components
+│   ├── contexts/       # React contexts
+│   ├── layouts/        # Layout components
+│   ├── pages/         # Page components
+│   ├── services/      # API services
+│   ├── types/         # TypeScript types
+│   └── utils/         # Utility functions
+├── server/            # Backend server code
+├── public/            # Static assets
+└── test/             # Test files
+```
 
-### `/pages/_error/+Page.jsx`
+## Features in Detail
 
-The [error page](https://vike.dev/error-page) which is rendered when errors occur.
+### Quiz System
 
-### `/pages/+onPageTransitionStart.ts` and `/pages/+onPageTransitionEnd.ts`
+- Dynamic question generation based on skill level
+- Progress saving
+- Real-time feedback
+- Score tracking
 
-The [`onPageTransitionStart()` hook](https://vike.dev/onPageTransitionStart), together with [`onPageTransitionEnd()`](https://vike.dev/onPageTransitionEnd), enables you to implement page transition animations.
+### AI Recommendations
 
-### SSR
+- Personalized learning paths
+- Strength/weakness analysis
+- Resource recommendations
+- Practice suggestions
 
-SSR is enabled by default. You can [disable it](https://vike.dev/ssr) for all your pages or only for some pages.
+### Performance
 
-### HTML Streaming
+- Question caching
+- Optimized bundle size
+- Progressive enhancement
+- Responsive design
 
-You can enable/disable [HTML streaming](https://vike.dev/stream) for all your pages, or only for some pages while still using it for others.
+## Contributing
 
-TODO
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Add Jest/RTL test to the products and CI/CD pipelines
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built with [Bati](https://batijs.dev)
+- Powered by [Vike](https://vike.dev)
+- Styled with [TailwindCSS](https://tailwindcss.com) and [DaisyUI](https://daisyui.com)
