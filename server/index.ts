@@ -15,7 +15,7 @@ const port = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? "https://my-domain.vercel.dev" : "http://localhost:3000",
+    origin: process.env.NODE_ENV === "production" ? "https://aiskillgaugr.vercel.app" : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -30,10 +30,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     error: "Internal Server Error",
     message: process.env.NODE_ENV === "development" ? err.message : undefined,
   });
-});
-
-app.get("/health", (req: Request, res: Response) => {
-  res.status(200).json({ status: "ok" });
 });
 
 app.use("/api", router);

@@ -10,6 +10,8 @@
   </table>
 </div>
 
+Live site: https://aiskillgaugr.vercel.app/
+
 AISkillGaugr is an AI-powered tool for assessing and improving programming skills through interactive quizzes and personalized recommendations.
 
 ## Features
