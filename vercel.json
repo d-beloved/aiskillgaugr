@@ -6,14 +6,10 @@
   "framework": "vite",
   "regions": ["sfo1"],
   "outputDirectory": "dist",
-  "functions": {
-    "api/**/*": {
-      "memory": 1024,
-      "maxDuration": 10
+  "rewrites": [
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/api/ssr.js"
     }
-  },
-  "env": {
-    "PUBLIC_ENV__GOOGLE_ANALYTICS": "@ga_measurement_id",
-    "HUGGING_FACE_API_KEY": "@huggingface_api_key"
-  }
+  ]
 }
