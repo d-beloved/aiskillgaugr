@@ -127,10 +127,15 @@ const QuizOptionsModal: FC<QuizOptionsModalProps> = ({ showModal, onClose }) => 
           </div>
 
           <div className="modal-action animate-slide-up" style={{ "--delay": "400ms" } as React.CSSProperties}>
-            <button type="button" className="btn btn-ghost hover:bg-slate-700/50" onClick={onClose}>
+            <button type="button" role="button" className="btn btn-ghost hover:bg-slate-700/50" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary sm:w-1/2 md:w-[29%]" disabled={!isReady || isLoading}>
+            <button
+              type="submit"
+              role="button"
+              className="btn btn-primary sm:w-1/2 md:w-[29%]"
+              disabled={!isReady || isLoading}
+            >
               {isLoading ? <span className="loading loading-spinner"></span> : "Start Quiz"}
             </button>
           </div>
