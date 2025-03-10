@@ -38,14 +38,10 @@ app.use((req: Request, res: Response) => {
   res.status(404).json({ error: "Not Found" });
 });
 
-const startServer = () => {
+if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
   });
-};
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  startServer();
 }
 
-export default { app, startServer };
+export default app;

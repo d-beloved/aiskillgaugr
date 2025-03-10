@@ -8,8 +8,12 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!assets/).*)",
-      "destination": "/api/ssr.js"
+      "source": "/api/:path*",
+      "destination": "/server/index.ts"
+    },
+    {
+      "source": "/((?!api).*)",
+      "destination": "/"
     }
   ]
 }

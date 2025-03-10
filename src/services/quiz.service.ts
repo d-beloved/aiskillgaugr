@@ -2,7 +2,7 @@ import { BaseQuestions } from "@/constants";
 import { QuizQuestion, QuizPreference } from "../types";
 import { cacheManager } from "@/utils/cache";
 
-const API_URL = process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
+const API_URL = process.env.NODE_ENV === "production" ? "/api" : "http://localhost:3001/api";
 
 export const startQuiz = async (language: string, level: string, count: number): Promise<QuizQuestion[]> => {
   const preferences = { language, level, quizCount: count.toString() };
@@ -47,7 +47,7 @@ const mergeQuestions = (base: QuizQuestion[], ai: QuizQuestion[]) => {
 
 async function fetchAIQuestions(language: string, level: string, count: number): Promise<QuizQuestion[]> {
   try {
-    const response = await fetch(`${API_URL}/api/quiz`, {
+    const response = await fetch(`${API_URL}/quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const fetchAIRecommendations = async (
   score: number,
 ): Promise<string> => {
   try {
-    const response = await fetch(`${API_URL}/api/recommendation`, {
+    const response = await fetch(`${API_URL}/recommendation`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -29,7 +29,7 @@ export default function SessionWarning({ onTimeUp }: SessionWarningProps) {
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-lg p-3 shadow-lg animate-pulse-slow
+      className={`flex items-center gap-3 rounded-lg p-3 shadow-lg
       ${isLowTime ? "bg-red-500/10 text-red-400" : "bg-yellow-500/10 text-yellow-400"}`}
     >
       <div className="flex-none">
@@ -51,7 +51,7 @@ export default function SessionWarning({ onTimeUp }: SessionWarningProps) {
       <div className="flex flex-col">
         <div className="font-semibold">
           Time Remaining:{" "}
-          <span className="font-mono">
+          <span className={`font-mono ${isLowTime ? "animate-pulse-slow text-red-400" : "text-white"}`}>
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </span>
         </div>
