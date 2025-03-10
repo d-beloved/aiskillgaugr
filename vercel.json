@@ -6,14 +6,20 @@
   "framework": "vite",
   "regions": ["sfo1"],
   "outputDirectory": "dist",
-  "rewrites": [
+  "functions": {
+    "api/*.ts": {
+      "runtime": "@vercel/node@2.15.10"
+    }
+  },
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/server/index.ts"
+      "src": "/api/(.*)",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "dest": "/api/quiz"
     },
     {
-      "source": "/((?!api).*)",
-      "destination": "/"
+      "src": "/(.*)",
+      "dest": "/"
     }
   ]
 }

@@ -24,6 +24,8 @@ app.use(
 
 app.use(express.json());
 
+app.use("/api", router);
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({
@@ -31,8 +33,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     message: process.env.NODE_ENV === "development" ? err.message : undefined,
   });
 });
-
-app.use("/api", router);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: "Not Found" });
