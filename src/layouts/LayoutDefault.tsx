@@ -6,6 +6,7 @@ import { QuizProvider } from "@/contexts/QuizContext";
 import Footer from "@/components/Footer";
 import logo from "../assets/guagrLogo.png";
 import { event } from "@/utils/analytics";
+import { usePageContext } from "vike-react/usePageContext";
 
 export const handleVisitRepository = () => {
   event({
@@ -16,13 +17,26 @@ export const handleVisitRepository = () => {
 };
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
+  const { urlPathname } = usePageContext();
+  const isQuizPage = urlPathname === "/quiz";
+
+  const Logo = () => (
+    <div className="w-36 h-12">
+      {isQuizPage ? (
+        <img src={logo} alt="Logo" className="w-full h-full" />
+      ) : (
+        <a href="/" className="block w-full h-full">
+          <img src={logo} alt="Logo" className="w-full h-full" />
+        </a>
+      )}
+    </div>
+  );
+
   return (
     <QuizProvider>
       <div className="min-h-screen bg-gradient-to-br from-slate-800 via-cyan-950 to-slate-900 flex flex-col">
         <div className="flex items-center justify-between px-16 pt-4 max-sm:p-4 animate-fade-in">
-          <div className="w-36  h-12">
-            <img src={logo} alt="Logo" className="w-full h-full" />
-          </div>
+          <Logo />
           <div>
             <a
               href="https://github.com/d-beloved/aiskillgaugr"
