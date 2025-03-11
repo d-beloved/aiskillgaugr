@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"vike dev\" \"tsx watch server/index.ts\"",
     "build": "pnpm run test && pnpm run build:client && pnpm run build:server",
-    "build:server": "tsc -p server/tsconfig.json --skipLibCheck",
+    "build:server": "tsc -p server/tsconfig.json --skipLibCheck && cp server/app.ts dist/server/",
     "build:client": "vike build",
     "start": "concurrently \"node --experimental-json-modules dist/server/entry.mjs\" \"vike preview\"",
     "test": "vitest run",

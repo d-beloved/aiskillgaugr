@@ -8,7 +8,7 @@
   "outputDirectory": "dist",
   "functions": {
     "api/*.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@2.15.10"
     }
   },
   "routes": [

@@ -3,16 +3,9 @@
   "compilerOptions": {
     "outDir": "../dist/server",
     "module": "ESNext",
-    "target": "ES2022",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    },
-    "types": ["node"]
+    "moduleResolution": "bundler",
+    "allowJs": true
   },
-  "include": ["index.ts", "routes/**/*", "services/**/*"],
-  "exclude": ["node_modules", "dist", "../src/**/*"]
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
 }
