@@ -1,7 +1,7 @@
 import { QuizQuestion, TopicWeight } from "../../src/types";
-import { TopicWeights } from "../../src/constants";
+import { TopicWeights } from "../../src/constants/index.js";
 import { Request, Response } from "express";
-import { sendPrompt } from "../routes/utils/sendPrompt";
+import { sendPrompt } from "../utils/sendPrompt.js";
 
 export const generateQuizQuestions = async (req: Request, res: Response) => {
   const { language, level, count } = req.body;

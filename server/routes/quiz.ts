@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { generateQuizQuestions } from "../services/fetchAIQuestions";
-import { getRecommendation } from "../services/fetchAIRecmndtn";
+import { generateQuizQuestions } from "../services/fetchAIQuestions.js";
+import { getRecommendation } from "../services/fetchAIRecmndtn.js";
 
 const router = Router();
 

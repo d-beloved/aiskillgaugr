@@ -1,6 +1,6 @@
 import { QuizQuestion } from "../../src/types";
 import { Request, Response } from "express";
-import { sendPrompt } from "../routes/utils/sendPrompt";
+import { sendPrompt } from "../utils/sendPrompt.js";
 
 export const getRecommendation = async (req: Request, res: Response) => {
   const { preferences, questions, answers, score } = req.body;

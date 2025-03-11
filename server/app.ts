@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
 import cors from "cors";
-import router from "./routes/quiz";
+import router from "./routes/quiz.js";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
