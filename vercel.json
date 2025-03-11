@@ -1,15 +1,14 @@
 {
   "version": 2,
   "buildCommand": "pnpm build",
-  "devCommand": "pnpm dev",
   "installCommand": "pnpm install",
+  "devCommand": "pnpm dev",
   "framework": "vite",
   "regions": ["sfo1"],
   "outputDirectory": "dist",
   "functions": {
     "api/*.ts": {
-      "runtime": "@vercel/node@2.15.10",
-      "memory": 1024
+      "runtime": "nodejs18.x"
     }
   },
   "routes": [
@@ -18,12 +17,10 @@
       "methods": ["GET", "POST", "OPTIONS"],
       "dest": "/api/quiz"
     },
+    { "handle": "filesystem" },
     {
       "src": "/(.*)",
       "dest": "/"
     }
-  ],
-  "env": {
-    "NODE_VERSION": "18.x"
-  }
+  ]
 }
