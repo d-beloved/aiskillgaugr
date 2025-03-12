@@ -27,7 +27,7 @@ export default function Page() {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [session]);
 
-  if (isLoading || !session) {
+  if (isLoading || !session || !session.questions || !session.questions[session.currentIndex]) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="loading loading-spinner loading-lg"></div>
@@ -43,12 +43,17 @@ export default function Page() {
 
   const handleSubmitAnswer = useCallback(
     async (answer: string, finish: boolean) => {
-      const shouldNavigate = await submitAnswer(answer, finish);
-      if (shouldNavigate) {
-        navigate("/result");
+      try {
+        const shouldNavigate = await submitAnswer(answer, finish);
+        if (shouldNavigate) {
+          navigate("/result");
+        }
+      } catch (err) {
+        console.error("Error submitting answer", err);
+        navigate("/");
       }
     },
-    [lastQuestion, submitAnswer],
+    [submitAnswer],
   );
 
   const handleRetry = () => {
