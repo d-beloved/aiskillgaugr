@@ -52,9 +52,8 @@ export default function Page() {
   );
 
   const handleRetry = () => {
-    clearError();
     switch (error?.type) {
-      case "SESSION_EXPIRED":
+      case "API_ERROR":
         navigate("/");
         break;
       default:
