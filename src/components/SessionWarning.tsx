@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuiz } from "@/contexts/QuizContext";
 import { TEN_MINUTES } from "@/utils/session";
 
@@ -8,7 +8,15 @@ interface SessionWarningProps {
 
 export default function SessionWarning({ onTimeUp }: SessionWarningProps) {
   const { session } = useQuiz();
+  const timeupHandled = useRef(false);
   const [timeLeft, setTimeLeft] = useState<number>(TEN_MINUTES);
+
+  const handleTimeUp = useCallback(() => {
+    if (!timeupHandled.current) {
+      timeupHandled.current = true;
+      onTimeUp();
+    }
+  }, [onTimeUp]);
 
   useEffect(() => {
     if (!session) return;
@@ -21,7 +29,11 @@ export default function SessionWarning({ onTimeUp }: SessionWarningProps) {
     return () => clearInterval(interval);
   }, [session]);
 
-  if (!session || timeLeft === 0) onTimeUp();
+  useEffect(() => {
+    if (session && timeLeft === 0 && !timeupHandled.current) {
+      handleTimeUp();
+    }
+  }, [timeLeft, handleTimeUp]);
 
   const minutes = Math.floor(timeLeft / (60 * 1000));
   const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
