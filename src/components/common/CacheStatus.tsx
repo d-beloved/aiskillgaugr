@@ -3,8 +3,9 @@ import { useQuiz } from "@/contexts/QuizContext";
 import { cacheManager } from "@/utils/cache";
 
 export default function CacheStatus() {
-  const { quizPreferences } = useQuiz();
+  const { quizPreferences, session } = useQuiz();
   const [isPreexistingCache, setIsPreexistingCache] = useState<boolean>(false);
+  const [usingBaseQuestions, setUsingBaseQuestions] = useState<boolean>(false);
 
   useEffect(() => {
     if (quizPreferences) {
@@ -14,12 +15,18 @@ export default function CacheStatus() {
       const isOldCache = cacheTimestamp && Date.now() - cacheTimestamp > 10000;
       setIsPreexistingCache(!!cachedData && !!isOldCache);
     }
-  }, [quizPreferences]);
+    if (session && session.questions.length === 5) {
+      setUsingBaseQuestions(true);
+    }
+  }, [quizPreferences, session]);
 
-  if (!isPreexistingCache) return null;
+  if (!isPreexistingCache && !usingBaseQuestions) return null;
 
   return (
-    <div className="tooltip tooltip-top tooltip-info" data-tip="These Questions are loaded from previous session">
+    <div
+      className="tooltip tooltip-top tooltip-info"
+      data-tip={`${usingBaseQuestions} ? "Using Base Questions" : "These Questions are loaded from previous session`}
+    >
       <div
         className="badge bg-primary/30 text-info gap-2 p-4 shadow-lg 
                     hover:bg-primary/20 transition-all duration-300 animate-fade-in"
@@ -32,7 +39,7 @@ export default function CacheStatus() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
-        <span className="font-medium">Using cached questions</span>
+        <span className="font-medium">{`${usingBaseQuestions} ? "Failed to load the AI generated questions. Using Base Questions." : "Using cached questions`}</span>
       </div>
     </div>
   );
