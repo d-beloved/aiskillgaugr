@@ -46,7 +46,7 @@ export const generateQuizQuestions = async (req: Request, res: Response) => {
 
     let cleanText = response.generated_text
       .trim()
-      .replace(/^```(javascript|json)\s*|\s*```$/gm, "")
+      .replace(/^```(javascript|json|python|java|kotlin|typescript)\s*|\s*```$/gm, "")
       .replace(/^const\s+questions\s+=\s+/m, "")
       .replace(/`([^`]+)`/g, (match, code) => {
         return code.replace(/"/g, '\\"');
