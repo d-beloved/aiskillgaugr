@@ -19,7 +19,7 @@ export default function CacheStatus() {
   if (!isPreexistingCache) return null;
 
   return (
-    <div className="tooltip tooltip-top tooltip-info" data-tip="These Questions are loaded from previous session">
+    <div className="tooltip tooltip-info tooltip-top" data-tip="These Questions are loaded from previous session">
       <div
         className="badge bg-primary/30 text-info gap-2 p-4 shadow-lg 
                     hover:bg-primary/20 transition-all duration-300 animate-fade-in"
@@ -32,7 +32,7 @@ export default function CacheStatus() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
-        <span className="font-medium">Using cached questions</span>
+        <span className="font-medium">Using cached questions.</span>
       </div>
     </div>
   );

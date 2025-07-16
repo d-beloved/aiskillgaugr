@@ -32,6 +32,7 @@ export default function QuizResult() {
   const { questions, answers, score, scorePercentage } = quizResult;
 
   const handleGetRecommendation = () => {
+    clearError();
     getRecommendation(quizPreferences!, questions, answers, score);
   };
 
@@ -49,7 +50,7 @@ export default function QuizResult() {
   return (
     <div className="min-h-screen flex justify-center p-4 animate-fade-in">
       <div className="w-full max-w-4xl space-y-8">
-        {error && <ErrorAlert error={error} onRetry={clearError} onDismiss={clearError} />}
+        {error && <ErrorAlert error={error} onDismiss={clearError} />}
 
         <div className="w-full card bg-slate-800/50 backdrop-blur shadow-xl p-6 animate-slide-up">
           <div className="text-center mb-8">

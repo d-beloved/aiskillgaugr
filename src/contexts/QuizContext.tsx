@@ -53,11 +53,19 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentIndex: 0,
         answers: [],
         isComplete: false,
-        ...sessionManager.create(quizCount),
+        ...sessionManager.create(quizCount, questions.length),
       };
       setSession(newSession);
       setPreferences(prefs);
       sessionManager.save(newSession, prefs);
+
+      if (questions.length === 5) {
+        setError({
+          type: "API_ERROR",
+          message: "Error",
+          details: "Failed to fetch AI generated questions, using default questions",
+        });
+      }
     } catch (err) {
       setError({
         type: "API_ERROR",
@@ -132,7 +140,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       setError({
         type: "API_ERROR",
-        message: "Failed to get recommendation",
+        message: "Error",
         details: err instanceof Error ? err.message : "Unknown error",
       });
     } finally {

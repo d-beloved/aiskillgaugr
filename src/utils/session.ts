@@ -1,11 +1,12 @@
-import { QuizData, QuizPreference, QuizResults } from "@/types";
+import { QuizData, QuizPreference, QuizResults, SessionManager } from "@/types";
 
 export const TEN_MINUTES = 10 * 60 * 1000;
 const TWENTY_MINUTES = 20 * 60 * 1000;
+const FIVE_MINUTES = 5 * 60 * 1000;
 
 export const sessionManager = {
-  create(count: string): Pick<QuizData, "timestamp" | "expiresIn" | "isExpired"> {
-    const sessionDuration = count === "10" ? TEN_MINUTES : TWENTY_MINUTES;
+  create(count: string, numOfQuestions: number): SessionManager {
+    const sessionDuration = numOfQuestions === 5 ? FIVE_MINUTES : count === "10" ? TEN_MINUTES : TWENTY_MINUTES;
     return {
       timestamp: Date.now(),
       expiresIn: sessionDuration,
@@ -13,7 +14,7 @@ export const sessionManager = {
     };
   },
 
-  isExpired(session: QuizData): boolean {
+  isExpired(session: SessionManager): boolean {
     return Date.now() - session.timestamp > session.expiresIn;
   },
 
