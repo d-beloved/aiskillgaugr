@@ -57,10 +57,6 @@
     "vite": "^6.1.0",
     "vitest": "^3.0.7"
   },
-  "engines": {
-    "node": "24.x",
-    "pnpm": ">=8.0.0"
-  },
   "type": "module",
   "license": "MIT",
   "pnpm": {
